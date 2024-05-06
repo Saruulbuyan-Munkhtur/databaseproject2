@@ -13,6 +13,7 @@
   "author": "saruul and harrold",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "node": "^22.1.0"
   }
 }
