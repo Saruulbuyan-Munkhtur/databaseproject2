@@ -19,7 +19,7 @@ const Station = sequelize.define('stations', {
   },
 }, {
   timestamps: false, // Disables createdAt and updatedAt
-  freezeTableName: true, // Keeps the table name as "Station" or "stations"
+  tableName: 'stations',
 });
 
 module.exports = Station;
