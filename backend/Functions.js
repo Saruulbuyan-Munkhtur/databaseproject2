@@ -1,3 +1,4 @@
+require('dotenv').config({path: '/Users/harroldtok/databaseproject2/backend/.env'});
 const Sequelize = require('sequelize');
 
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
@@ -9,6 +10,11 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
 
 module.exports = sequelize;
 
+console.log('DB_NAME:', process.env.DB_NAME);
+console.log('DB_USER:', process.env.DB_USER);
+console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
+console.log('DB_HOST:', process.env.DB_HOST);
+console.log('DB_PORT:', process.env.DB_PORT);
 
 const Station = require('./src/models/stations.js');
 const addStation = async () => {
@@ -25,17 +31,29 @@ const addStation = async () => {
   }
 };
 
-const deleteStation = async () => {
+// Function to update a station given an identifier and new data
+const modifyStation = async (station_english_name, updatedDetails) => {
     try {
-      const newStation = await Station.create({
-        station_english_name: 'test2',
-        district: 'test',
-        intro: 'test',
-        chinese_name: 'test'
+      // Find the station by its English name
+      const station = await Station.findOne({
+        where: { station_english_name: station_english_name },
       });
-      console.log('Data inserted successfully:', newStation.toJSON());
+  
+      if (!station) {
+        console.log(`Station with English name "${station_english_name}" not found.`);
+        return;
+      }
+  
+      // Update the station with the new details
+      await station.update(updatedDetails);
+  
+      console.log('Station updated successfully:', station.toJSON());
     } catch (error) {
-      console.error('Error inserting data:', error);
+      console.error('Error updating station:', error);
     }
   };
-addStation();
+  modifyStation('test2', {
+    district: 'changed',
+    intro: 'changed',
+    chinese_name: "wojfwef",
+  })
