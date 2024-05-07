@@ -1,26 +1,25 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
-const Station = sequelize.define('Station', {
+const Station = sequelize.define('stations', {
   station_english_name: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     primaryKey: true,
-    autoIncrement: true,
+    allowNull: false,
   },
   district: {
     type: DataTypes.STRING,
     allowNull: false,
   },
   intro: {
-	type: DataTypes.TEXT,
-	allowNull: false,
+    type: DataTypes.STRING,
   },
-  chinese_name:{
-	type: DataTypes.STRING,
-	allowNull: false,
+  chinese_name: {
+    type: DataTypes.STRING,
   },
-
-  // Add more attributes as needed
+}, {
+  timestamps: false, // Disables createdAt and updatedAt
+  freezeTableName: true, // Keeps the table name as "Station" or "stations"
 });
 
 module.exports = Station;

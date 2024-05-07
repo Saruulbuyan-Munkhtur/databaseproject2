@@ -1,27 +1,39 @@
-const { Client } = require('pg');
+const Sequelize = require('sequelize');
 
-const client = new Client({
-    user: 'saruul',
-    host: 'localhost',
-    database: 'project_database',
-    password: '123456',
-    port: 5432,
+const sequelize = new Sequelize('postgres', 'harroldtok', '6969', {
+  host: 'localhost',
+  dialect: 'postgres',
+});
+
+module.exports = sequelize;
+
+
+const Station = require('./src/models/stations.js');
+const addStation = async () => {
+  try {
+    const newStation = await Station.create({
+      station_english_name: 'test2',
+      district: 'test',
+      intro: 'test',
+      chinese_name: 'test'
     });
+    console.log('Data inserted successfully:', newStation.toJSON());
+  } catch (error) {
+    console.error('Error inserting data:', error);
+  }
+};
 
-client.connect()
-.then(() => console.log('Connected to PostgreSQL server'))
-.catch(err => console.error('Error connecting to PostgreSQL server', err));
-
-if (client.connected) {
-    console.log('You are currently connected to PostgreSQL server');
-    } else {
-    console.log('You are not connected to PostgreSQL server');
+const deleteStation = async () => {
+    try {
+      const newStation = await Station.create({
+        station_english_name: 'test2',
+        district: 'test',
+        intro: 'test',
+        chinese_name: 'test'
+      });
+      console.log('Data inserted successfully:', newStation.toJSON());
+    } catch (error) {
+      console.error('Error inserting data:', error);
     }
-    
-client.query('SELECT * FROM cards')
-.then(res => console.log(res.rows))
-.catch(err => console.error('Error executing query', err));
-
-client.end()
-.then(() => console.log('Connection to PostgreSQL server closed'))
-.catch(err => console.error('Error closing connection', err));
+  };
+addStation();
