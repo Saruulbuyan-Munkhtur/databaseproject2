@@ -1,5 +1,6 @@
 require('dotenv').config({path: '/Users/harroldtok/databaseproject2/backend/.env'});
 const Sequelize = require('sequelize');
+const { Op } = require('sequelize');
 
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
     host: process.env.DB_HOST,
@@ -163,7 +164,7 @@ const modifyLine = async (line_name, updatedDetails) => {
           x++;
       }
       await updatePositionsAfterInsertion(lineName, position, x);
-      
+
         for (const stationName of stationNames) {
             // Check if station exists
             const station = await Station.findOne({
@@ -215,4 +216,44 @@ const updatePositionsAfterInsertion = async (lineName, lastInsertedPosition, x) 
   }
 };
 
-placeStationsOnLine('1号线', ['Buji', 'Baigelong'], 3);
+const findNthStation = async (lineName, stationName, n) => {
+  try {
+    // Check if station exists
+    const station = await Station.findOne({
+      where: { station_english_name: stationName },
+  });
+
+  if (!station) {
+      console.log(`Station with name "${stationName}" not found.`);
+      // Handle this situation according to your requirements (e.g., skip this station)
+      return;
+  }
+
+  const checkStation = await Lines_Station.findOne({
+    where: {
+        line_name: lineName,
+        station_name: stationName,
+    }
+});
+let x = checkStation.position + n;
+let y = checkStation.position - n;
+
+const nthStations = await Lines_Station.findAll({
+  where: {
+    line_name: lineName,
+    position: {
+      [Op.or]: [x, y]
+    }
+  }
+});
+
+  for(nthStation of nthStations){
+    console.log(nthStation.station_name);
+  }
+
+  } catch (error) {
+      console.error('Error updating positions after insertion:', error);
+  }
+};
+
+findNthStation('1号线','Luohu', 5);
