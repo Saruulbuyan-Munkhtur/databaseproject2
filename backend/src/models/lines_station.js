@@ -16,6 +16,10 @@ const Lines_Station = sequelize.define('lines_station', {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  status: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 }, {
   timestamps: false, // Disables createdAt and updatedAt
   tableName: 'lines_station',
