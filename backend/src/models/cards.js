@@ -12,7 +12,7 @@ const Cards = sequelize.define('cards', {
     allowNull: false,
   },
   create_time: {
-    type: DataTypes.timestamps,
+    type: DataTypes.DATE,
     allowNull: false,
   },
 }, {

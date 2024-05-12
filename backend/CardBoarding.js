@@ -11,8 +11,8 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
 
 module.exports = sequelize;
 
-const Passengers = require('./src/models/cards.js');
-const UserID_Rides = require('./src/models/cardid_rides.js');
+const Cards = require('./src/models/cards.js');
+const CardID_Rides = require('./src/models/cardid_rides.js');
 
 //register new Card
 const registerCard = async (user, money, createTime) => {

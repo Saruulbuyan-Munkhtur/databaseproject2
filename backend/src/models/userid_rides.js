@@ -13,7 +13,7 @@ const UserID_rides = sequelize.define('userid_rides', {
   },
   start_station: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
   },
   end_station: {
     type: DataTypes.STRING,
@@ -24,13 +24,17 @@ const UserID_rides = sequelize.define('userid_rides', {
     allowNull: false,
   },
   start_time: {
-    type: DataTypes.timestamps,
+    type: DataTypes.DATE,
     allowNull: false,
   },
   end_time: {
-    type: DataTypes.timestamps,
+    type: DataTypes.DATE,
     allowNull: false,
   },
+  status: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }
 }, {
   timestamps: false, // Disables createdAt and updatedAt
   tableName: 'userid_rides',

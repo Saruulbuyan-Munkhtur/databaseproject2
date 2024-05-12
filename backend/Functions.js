@@ -7,11 +7,20 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     port: process.env.DB_PORT,
     dialect: 'postgres',
   });
+
+
+const Station = require('./src/models/stations.js');
+const Line = require('./src/models/lines.js');
+const Passengers = require('./src/models/passengers.js');
+const UserID_Rides = require('./src/models/userid_rides.js');
+const Cards = require('./src/models/cards.js');
+const CardID_Rides = require('./src/models/cardid_rides.js');
+const Lines_Station = require('./src/models/lines_station.js');
+const { get } = require('http');
   
 
 module.exports = sequelize;
 
-const Station = require('./src/models/stations.js');
 const addStation = async () => {
   try {
     const newStation = await Station.create({
@@ -71,7 +80,7 @@ const modifyStation = async (station_english_name, updatedDetails) => {
   };
 
 
-  const Line = require('./src/models/lines.js');
+
 const addLine = async () => {
   try {
     const newLine = await Line.create({
@@ -133,7 +142,7 @@ const modifyLine = async (line_name, updatedDetails) => {
     }
   };
 
-  const Lines_Station = require('./src/models/lines_station.js');
+  
   const placeStationsOnLine = async (lineName, stationNames, position) => {
     try {
         // Find the line by name
@@ -256,4 +265,82 @@ const nthStations = await Lines_Station.findAll({
   }
 };
 
-findNthStation('1号线','Luohu', 5);
+//7. Can view all information about passengers or cards who have boarded but have not yet exited at the current time.
+const currentTime = '2024-03-25 21:51:15.000000'; //Make currentTime userInput
+
+function getBoardedCards(currentTime) {
+  return new Promise((resolve, reject) => {
+    const query = `SELECT * FROM cardid_rides cr JOIN cards c ON cr.user_code = c.code WHERE STATUS = 'ONGOING' AND cr.start_time <= '${currentTime}';`;
+
+    sequelize.query(query)
+      .then(results => {
+        console.log('Query executed successfully');
+        console.log(results);
+
+        // Resolve the promise with the results
+        resolve(results);
+      })
+      .catch(error => {
+        console.error('Error executing SQL query:', error);
+        // Reject the promise with the error
+        reject(error);
+      });
+  });
+}
+
+function getBoardedPassengers(currentTime) {
+  return new Promise((resolve, reject) => {
+    const query = `SELECT * FROM userid_rides u JOIN passengers p ON u.user_id = p.id_number WHERE STATUS = 'ONGOING' AND cr.start_time <= '${currentTime}';`;
+
+    sequelize.query(query)
+      .then(results => {
+        console.log('Query executed successfully');
+        console.log(results);
+
+        // Resolve the promise with the results
+        resolve(results);
+      })
+      .catch(error => {
+        console.error('Error executing SQL query:', error);
+        // Reject the promise with the error
+        reject(error);
+      });
+  });
+}
+
+function getAllBoarded(currentTime) {
+  return new Promise((resolve, reject) => {
+    const query1 = `SELECT * FROM cardid_rides cr JOIN cards c ON cr.user_code = c.code WHERE STATUS = 'ONGOING' AND cr.start_time <= '${currentTime}';`;
+    const query2 = `SELECT * FROM userid_rides u JOIN passengers p ON u.user_id = p.id_number WHERE STATUS = 'ONGOING' AND u.start_time <= '${currentTime}';`;
+
+    sequelize.query(query1)
+      .then(results => {
+        console.log('Query executed successfully');
+        console.log(results[0]);
+
+        // Resolve the promise with the results
+        resolve(results[0]);
+      })
+      .catch(error => {
+        console.error('Error executing SQL query:', error);
+        // Reject the promise with the error
+        reject(error);
+      });
+
+    sequelize.query(query2)
+    .then(results => {
+      console.log('Query executed successfully');
+      console.log(results[0]);
+
+      // Resolve the promise with the results
+      resolve(results[0]);
+    })
+    .catch(error => {
+      console.error('Error executing SQL query:', error);
+      // Reject the promise with the error
+      reject(error);
+    });
+  });
+}
+
+getAllBoarded(currentTime);

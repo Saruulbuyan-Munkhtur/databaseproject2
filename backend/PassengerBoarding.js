@@ -15,7 +15,7 @@ const Passengers = require('./src/models/passengers.js');
 const UserID_Rides = require('./src/models/userid_rides.js');
 
 //register passenger
-const registerPassenger = async (ID, Name, Phone_number, Gender, District) => {
+const registerPassengerUsingID = async (ID, Name, Phone_number, Gender, District) => {
     try {
       const newPassenger = await Passengers.create({
         id_number: ID,
@@ -39,6 +39,7 @@ const registerRide = async (ID, StartStation, Price, StartTime, Status) => {
         price: Price,
         start_time: StartTime,
         end_time: StartTime,
+        Status: 'ONGOING'
       });
       console.log('Ride registered successfully:', newRide.toJSON());
     } catch (error) {
@@ -47,14 +48,19 @@ const registerRide = async (ID, StartStation, Price, StartTime, Status) => {
   };
 
 //exit ride
-
-
-
-
-
-
-
-
+const exitRide = async (ID, endStation, endTime) => {
+  try {
+    const exitRide = await UserID_Rides.findOne({
+      where: { id_number: ID,
+               Status: 'ONGOING',
+           },
+    });
+    await exitRide.update({end_station: endStation, end_time: endTime, status: 'EXPIRED'});
+    console.log('Exit Ride:', newRide.toJSON());
+  } catch (error) {
+    console.error('Error inserting data:', error);
+  }
+};
 
 //find ride details
 const findRideDetails = async (ID, StartStation, EndStation, Price, StartTime, EndTime) => {
