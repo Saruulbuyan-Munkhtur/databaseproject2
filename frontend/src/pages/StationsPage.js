@@ -1,16 +1,17 @@
 import React from 'react';
-import { Route, useMatch } from 'react-router-dom';
 import Stations from '../components/stations/stations';
 import StationDetails from '../components/stations/stationDetails';
+import { Route, Routes } from 'react-router-dom';
+import './page.css';
 
 const StationsPage = () => {
-  const match = useMatch();
-
   return (
     <div className="stations-page">
       <h1>Stations</h1>
-      <Route exact path={match.path} element={<Stations />} />
-      <Route path={`${match.path}/:id`} element={<StationDetails />} />
+      <Routes>
+        <Route path="/" element={<Stations />} />
+        <Route path="/:id" element={<StationDetails />} />
+      </Routes>
     </div>
   );
 };

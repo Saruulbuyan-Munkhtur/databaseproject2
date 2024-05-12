@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getStationById } from '../../services/stationServices';
+import './stations.css';
 
 const StationDetails = () => {
   const { id } = useParams();
@@ -25,12 +26,10 @@ const StationDetails = () => {
 
   return (
     <div className="station-details">
-      <h2>{station.name}</h2>
-      <p>Line: {station.line}</p>
-      <p>Location: {station.location}</p>
-      <p>Description: {station.description}</p>
-      <p>Opened: {station.openingDate}</p>
-      <p>Facilities: {station.facilities.join(', ')}</p>
+      <h2>{station.chinese_name}</h2>
+      <p>English Name: {station.station_english_name}</p>
+      <p>District: {station.district}</p>
+      <p>Introduction: {station.intro}</p>
     </div>
   );
 };

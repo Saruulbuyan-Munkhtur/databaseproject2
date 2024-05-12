@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Route, useMatch } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import './stations.css';
 import { getStations } from '../../services/stationServices';
 import StationItem from './stationItem';
@@ -7,7 +7,7 @@ import StationDetails from './stationDetails';
 
 const Stations = () => {
   const [stations, setStations] = useState([]);
-  const match = useMatch();
+  const { id } = useParams();
 
   useEffect(() => {
     const fetchStations = async () => {
@@ -31,10 +31,10 @@ const Stations = () => {
         <div>
           <ul className="station-list">
             {stations.map((station) => (
-              <StationItem key={station.id} station={station} />
+              <StationItem key={station.station_english_name} station={station} />
             ))}
           </ul>
-          <Route path={`${match.path}/:id`} element={<StationDetails />} />
+          {id && <StationDetails />}
         </div>
       )}
     </div>
