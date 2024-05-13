@@ -37,7 +37,7 @@ const registerRideUsingCard = async (ID, StartStation, Price, StartTime) => {
         price: Price,
         start_time: StartTime,
         end_time: StartTime,
-        Status: 'ONGOING'
+        status: 'ONGOING'
       });
       console.log('Ride registered successfully:', newRide.toJSON());
     } catch (error) {

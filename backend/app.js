@@ -3,7 +3,6 @@ const sequelize = require('./src/config/database');
 // const linesRoutes = require('./src/routes/lineRoutes');
 const stationRoutes = require('./src/routes/stationRoutes');
 const cors = require('cors');
-
 const app = express();
 
 // Enable CORS

@@ -185,12 +185,13 @@ class Node {
         }
     }
 
-shortestPath('Tanglang', 'Hongshan')
-.then((path) => {
-    console.log("Shortest path:", path);
-})
-.catch((err) => {
-    console.error(err);
-});
+    shortestPath('Wuhe', 'Huangbeiling')
+    .then((path) => {
+        console.log("Shortest path:", path);
+    })
+    .catch((err) => {
+        console.error(err);
+    });
+
     
 
