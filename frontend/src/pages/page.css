@@ -60,3 +60,37 @@
       .station-details {
 	margin-top: 20px;
       }
+      .line-color {
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	margin-right: 10px;
+      }
+      
+      .line-name {
+	font-weight: bold;
+      }
+      
+      .lines-page {
+	max-width: 600px;
+	margin: 0 auto;
+	padding: 20px;
+      }
+      
+      .lines-page h1 {
+	font-size: 24px;
+	margin-bottom: 20px;
+      }
+      
+      .line-list {
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	overflow: hidden;
+      }
+      .sort-options {
+	margin-bottom: 20px;
+      }
+      
+      .sort-options label {
+	margin-right: 10px;
+      }

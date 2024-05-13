@@ -1,4 +1,4 @@
-const Lines = require('./models/lines');
+const Lines = require('../models/lines');
 
 exports.getAllLines = async () => {
   try {
