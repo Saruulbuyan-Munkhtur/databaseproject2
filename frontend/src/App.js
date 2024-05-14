@@ -4,7 +4,7 @@ import './App.css';
 import Header from './components/header/header';
 import Footer from './components/footer/footer';
 import Home from './components/home/home';
-// import LinesPage from './pages/LinesPage';
+import LinesPage from './pages/LinesPage';
 import StationsPage from './pages/StationsPage';
 // import SchedulePage from './pages/SchedulePage';
 
@@ -16,7 +16,7 @@ const App = () => {
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
-            {/* <Route path="/lines" element={<LinesPage />} /> */}
+            <Route path="/lines" element={<LinesPage />} />
             <Route path="/stations" element={<StationsPage />} />
             {/* <Route path="/schedule" element={<SchedulePage />} /> */}
           </Routes>
