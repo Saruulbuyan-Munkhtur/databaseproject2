@@ -125,22 +125,17 @@ const updatePositionsAfterDeletion = async (deletedPosition) => {
     }
 };
 
-deleteStation('NJKEFE');
-//addStation('1号线','NJKEFE', 'district', 'intro', '山东龙口', 2, 'OPERATIONAL');
-
-
-
-const addLine = async () => {
+const addLine = async (lineName, intro, mileage, color, first_opening, url, start,end) => {
   try {
     const newLine = await Line.create({
-      line_name: 'test2',
-      intro: 'test',
-      mileage: 24.69,
-      color: 'blue',
-      first_opening: 2004-12-28,
-      url: 'test',
-      start_time: '06:20:00',
-      end_time: '06:20:00',
+      line_name: lineName,
+      intro: intro,
+      mileage: mileage,
+      color: color,
+      first_opening: first_opening,
+      url: url,
+      start_time: start,
+      end_time: end,
     });
     console.log('Data inserted successfully:', newLine.toJSON());
   } catch (error) {
@@ -182,6 +177,15 @@ const modifyLine = async (line_name, updatedDetails) => {
   
       // Update the station with the new details
       await line.destroy();
+
+      const linesWithStation = await Lines_Station.findAll({
+        where: {
+          line_name: line_name,
+        }
+      })
+      for(const lines of linesWithStation){
+        lines.destroy();
+      }
   
       console.log('Line destroyed', line.toJSON());
     } catch (error) {
@@ -386,3 +390,30 @@ function getAllBoarded(currentTime) {
     });
   });
 }
+
+
+//Miscellaneous functions
+
+const reloadCard = async (Code, amount) => {
+  try {
+    const card = await Cards.findOne({
+      where: { code: Code }
+    });
+
+    if (!card) {
+      console.error('Card not found');
+      return;
+    }
+
+    const updatedCard = await Cards.update(
+      { money: Sequelize.literal(`money + ${amount}`) },
+      { where: { code: Code }, returning: true }
+    );
+
+    console.log('Money will arrive soon');
+  } catch (err) {
+    console.error('Error updating card:', err);
+  }
+};
+
+reloadCard('881000497', 100);
