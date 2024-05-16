@@ -12,7 +12,9 @@ export const getStations = async () => {
 
 export const getStationById = async (id) => {
   try {
+    console.log("id: ", id);
     const response = await api.get(`/stations/${id}`);
+    console.log(response.data);
     return response.data;
   } catch (error) {
     throw new Error('Failed to fetch station details');
@@ -39,6 +41,7 @@ export const updateStation = async (id, stationData) => {
 
 export const deleteStation = async (id) => {
   try {
+    console.log("id: ", id )
     const response = await api.delete(`/stations/${id}`);
     return response.data;
   } catch (error) {

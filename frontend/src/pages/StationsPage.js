@@ -9,7 +9,7 @@ const StationsPage = () => {
     <div className="stations-page">
       <h1>Stations</h1>
       <Routes>
-        <Route path="/" element={<Stations />} />
+        <Route path="/*" element={<Stations />} />
         <Route path="/:id" element={<StationDetails />} />
       </Routes>
     </div>

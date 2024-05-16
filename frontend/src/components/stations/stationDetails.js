@@ -10,6 +10,7 @@ const StationDetails = () => {
   useEffect(() => {
     const fetchStation = async () => {
       try {
+        console.log("id: ", id);
         const data = await getStationById(id);
         setStation(data);
       } catch (error) {
