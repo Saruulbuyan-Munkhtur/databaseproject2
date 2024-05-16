@@ -2,6 +2,7 @@ const express = require('express');
 const sequelize = require('./src/config/database');
 const linesRoutes = require('./src/routes/lineRoutes');
 const stationRoutes = require('./src/routes/stationRoutes');
+const line_stationRoutes = require('./src/routes/line_stationRoutes');
 const cors = require('cors');
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 // Routes
 app.use('/lines', linesRoutes);
 app.use('/stations', stationRoutes);
+app.use('/line_stations', line_stationRoutes);
 
 // Sync database and start the server
 sequelize.sync()
