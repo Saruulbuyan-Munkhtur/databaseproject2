@@ -5,7 +5,7 @@ const { Op } = require('sequelize');
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
-    dialect: 'postgres',
+    dialect: process.env.DB_DIALECT,
   });
 
 
@@ -17,22 +17,24 @@ const Cards = require('./src/models/cards.js');
 const CardID_Rides = require('./src/models/cardid_rides.js');
 const Lines_Station = require('./src/models/lines_station.js');
 const { get } = require('http');
+const { stat } = require('fs');
   
 
 module.exports = sequelize;
 
-const addStation = async () => {
+const addStation = async (lineName, stationName, district, intro, chineseName, position, status) => {
   try {
     const newStation = await Station.create({
-      station_english_name: 'test2',
-      district: 'test',
-      intro: 'test',
-      chinese_name: 'test'
+      station_english_name: stationName,
+      district: district,
+      intro: intro,
+      chinese_name: chineseName
     });
     console.log('Data inserted successfully:', newStation.toJSON());
   } catch (error) {
     console.error('Error inserting data:', error);
   }
+  await placeStationsOnLine(lineName, [stationName], position, status);
 };
 
 // Function to update a station given an identifier and new data
@@ -60,24 +62,71 @@ const modifyStation = async (station_english_name, updatedDetails) => {
 
   const deleteStation = async (station_english_name) => {
     try {
-      // Find the station by its English name
-      const station = await Station.findOne({
-        where: { station_english_name: station_english_name },
-      });
-  
-      if (!station) {
-        console.log(`Station with English name "${station_english_name}" not found.`);
-        return;
+        // Find the station by its English name
+        const station = await Station.findOne({
+            where: { station_english_name: station_english_name },
+        });
+
+        if (!station) {
+          console.log(`Station with English name "${station_english_name}" not found.`);
+          return;
       }
-  
-      // Update the station with the new details
-      await station.destroy();
-  
-      console.log('Station destroyed', station.toJSON());
+
+        const stationOnLine = await Lines_Station.findAll({
+          where: {
+            station_name: station_english_name,
+          }
+        });
+
+        // Get the station's position
+        for(const stations of stationOnLine) {
+          const stationPosition = stations.position;
+          const stationsToUpdate = await Lines_Station.findAll({
+            where: {
+                line_name: stations.line_name,
+                position: { [Sequelize.Op.gt]: stationPosition }
+            },
+            order: [['position', 'ASC']]
+        });
+          y = stations.position;
+          for (const stationToUpdate of stationsToUpdate) {
+            await stationToUpdate.update({ position: y});
+            y++;
+          }
+          stations.destroy();
+        }
+
+        // Delete the station
+        await station.destroy();
+
+        console.log('Station destroyed:', station.toJSON());
     } catch (error) {
-      console.error('Error updating station:', error);
+        console.error('Error deleting station:', error);
     }
-  };
+};
+
+const updatePositionsAfterDeletion = async (deletedPosition) => {
+    try {
+        // Find stations in Lines_Station table with positions greater than the deleted position
+        const stationsToUpdate = await Lines_Station.findAll({
+            where: {
+                position: { [Sequelize.Op.gt]: deletedPosition }
+            }
+        });
+
+        // Update positions of stations
+        for (const stationToUpdate of stationsToUpdate) {
+            await stationToUpdate.update({ position: stationToUpdate.position - 1 });
+        }
+
+        console.log(`Positions updated for stations after position ${deletedPosition}`);
+    } catch (error) {
+        console.error('Error updating positions after deletion:', error);
+    }
+};
+
+deleteStation('NJKEFE');
+//addStation('1号线','NJKEFE', 'district', 'intro', '山东龙口', 2, 'OPERATIONAL');
 
 
 
@@ -98,8 +147,6 @@ const addLine = async () => {
     console.error('Error inserting data:', error);
   }
 };
-
-// Function to update a station given an identifier and new data
 const modifyLine = async (line_name, updatedDetails) => {
     try {
       // Find the line by name
@@ -143,7 +190,7 @@ const modifyLine = async (line_name, updatedDetails) => {
   };
 
   
-  const placeStationsOnLine = async (lineName, stationNames, position) => {
+  const placeStationsOnLine = async (lineName, stationNames, position, status) => {
     try {
         // Find the line by name
         const line = await Line.findOne({
@@ -172,7 +219,7 @@ const modifyLine = async (line_name, updatedDetails) => {
           }
           x++;
       }
-      await updatePositionsAfterInsertion(lineName, position, x);
+      await updatePositionsAfterInsertion(lineName, position, x, status);
 
         for (const stationName of stationNames) {
             // Check if station exists
@@ -191,6 +238,7 @@ const modifyLine = async (line_name, updatedDetails) => {
                 line_name: lineName,
                 station_name: stationName,
                 position: currentPosition,
+                status: status
             });
 
             console.log(`Station "${stationName}" placed on line "${lineName}" at position ${currentPosition}.`);
@@ -213,7 +261,6 @@ const updatePositionsAfterInsertion = async (lineName, lastInsertedPosition, x) 
           }
       });
 
-      // Increment positions of stations by 2
       for (const stationToUpdate of stationsToUpdate) {
           await stationToUpdate.update({ position: stationToUpdate.position + x });
       }
@@ -264,9 +311,6 @@ const nthStations = await Lines_Station.findAll({
       console.error('Error updating positions after insertion:', error);
   }
 };
-
-//7. Can view all information about passengers or cards who have boarded but have not yet exited at the current time.
-const currentTime = '2024-03-25 21:51:15.000000'; //Make currentTime userInput
 
 function getBoardedCards(currentTime) {
   return new Promise((resolve, reject) => {
@@ -342,5 +386,3 @@ function getAllBoarded(currentTime) {
     });
   });
 }
-
-getAllBoarded(currentTime);
