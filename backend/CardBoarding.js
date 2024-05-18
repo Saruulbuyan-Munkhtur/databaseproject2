@@ -31,7 +31,7 @@ const registerCard = async (user, money, createTime) => {
     }
   };
 //register ride
-const registerRideUsingCard = async (ID, StartStation, StartTime) => {
+const registerRideUsingCard = async (ID, StartStation, StartTime, startLine, endLine) => {
     try {
       const maxRideId = await getID();
       const newRideId = maxRideId + 1;
@@ -46,13 +46,15 @@ const registerRideUsingCard = async (ID, StartStation, StartTime) => {
         status: 'ONGOING'
       });
       console.log('Ride registered successfully:', newRide.toJSON());
+      await exitRide(ID, endStation, endTime, startLine, endLine);
+
     } catch (error) {
       console.error('Error inserting data:', error);
     }
   };
 
 //exit ride
-const exitRide = async (ID, endStation, endTime) => {
+const exitRide = async (ID, endStation, endTime, startLine, endLine) => {
   try {
     const exitRide = await CardID_Rides.findOne({
       where: { user_code: ID,
@@ -61,7 +63,7 @@ const exitRide = async (ID, endStation, endTime) => {
     });
     const start = await getChineseName(exitRide.start_station);
     const end = await getChineseName(endStation);
-    const JourneyPrice = await getPrice(start, end);
+    const JourneyPrice = await getPrice(start, end, startLine, endLine);
     await exitRide.update({end_station: endStation, end_time: endTime, price: JourneyPrice, status: 'EXPIRED'});
     console.log('Exit Ride:', exitRide.toJSON());
   } catch (error) {
@@ -109,11 +111,13 @@ const getChineseName = async (stationName) => {
   }
 };
 
-const getPrice = async (startStation, endStation) => {
+const getPrice = async (startStation, endStation, startLine, endLine) => {
   try {
     const Journey = await Price.findOne({
       where: { start_station: startStation,
-      end_station: endStation },
+      end_station: endStation,
+      start_station_line: startLine,
+      end_station_line: endLine, },
     });
 
     // Check if station exists and return its Chinese name
@@ -145,5 +149,5 @@ async function getID() {
   }
 }
 
-//registerRideUsingCard('883545979', 'Luohu', 1);
-exitRide('883545979', 'Tanglang', 1);
+//registerRideUsingCard('883545979', 'Luohu', '1970-01-01 10:00:00', '1号线', '5号线');
+exitRide('883545979', 'Tanglang', '1970-01-01 20:00:00', '1号线', '5号线');
