@@ -150,4 +150,4 @@ async function getID() {
 }
 
 //registerRideUsingCard('883545979', 'Luohu', '1970-01-01 10:00:00', '1号线', '5号线');
-exitRide('883545979', 'Tanglang', '1970-01-01 20:00:00', '1号线', '5号线');
+//exitRide('883545979', 'Tanglang', '1970-01-01 20:00:00', '1号线', '5号线');

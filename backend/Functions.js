@@ -416,4 +416,119 @@ const reloadCard = async (Code, amount) => {
   }
 };
 
-reloadCard('881000497', 100);
+const modifyPosition = async (lineName, stationName, position) => {
+  try {
+    const maxPosition = await Lines_Station.max('position', {
+      where: { line_name: lineName }
+    });
+      // Find the station by its English name
+      const station = await Station.findOne({
+          where: { station_english_name: stationName }
+      });
+
+      if (!station) {
+          console.log(`Station with English name "${stationName}" not found.`);
+          return;
+      }
+
+      const des = await Lines_Station.findOne({
+        where: {
+          line_name: lineName,
+          station_name: stationName,
+        }
+      })
+
+      const stationsToUpdate = await Lines_Station.findAll({
+          where: {
+              line_name: lineName,
+              position: { [Sequelize.Op.gt]: station.position }
+          },
+          order: [['position', 'ASC']]
+      });
+
+      let y = position;
+      for (const stationToUpdate of stationsToUpdate) {
+          await stationToUpdate.update({ position: y });
+          y++;
+      }
+
+      // Delete the existing station
+      await des.destroy();
+
+      // Update the positions of remaining stations
+      if(position == 1){
+        const updatedStations = await Lines_Station.findAll({
+          where: {
+              line_name: lineName,
+              position: { [Sequelize.Op.gte]: position }
+          },
+          order: [['position', 'ASC']]
+      });
+
+      y = position + 1;
+      for (const updatedStation of updatedStations) {
+          await updatedStation.update({ position: y });
+          y++;
+      } 
+    } else if(position == maxPosition){
+      const updatedStations = await Lines_Station.findAll({
+        where: {
+            line_name: lineName,
+            position: { [Sequelize.Op.lte]: position }
+        },
+        order: [['position', 'DESC']]
+    });
+
+    y = position - 1;
+    for (const updatedStation of updatedStations) {
+        await updatedStation.update({ position: y });
+        y--;
+    } 
+
+    }else{
+        const updatedStations = await Lines_Station.findAll({
+          where: {
+              line_name: lineName,
+              position: { [Sequelize.Op.gt]: position }
+          },
+          order: [['position', 'ASC']]
+      });
+
+      const updatedStations2 = await Lines_Station.findAll({
+        where: {
+            line_name: lineName,
+            position: { [Sequelize.Op.lte]: position }
+        },
+        order: [['position', 'DESC']]
+    });
+
+      y = position + 1;
+      for (const updatedStation of updatedStations) {
+          await updatedStation.update({ position: y });
+          y++;
+      }
+
+      y = position - 1;
+      for (const updatedStation of updatedStations2) {
+          await updatedStation.update({ position: y });
+          y--;
+      }
+
+      }
+
+      // Create a new station
+      const newStation = await Lines_Station.create({
+          line_name: lineName,
+          station_name: stationName,
+          position: position,
+          status: 'OPERATIONAL',
+      });
+
+      console.log('Data inserted successfully:', newStation.toJSON());
+  } catch (error) {
+      console.error('Error inserting data:', error);
+  }
+}
+
+
+modifyPosition('1号线', 'Laojie', 30);
