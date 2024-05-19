@@ -16,6 +16,7 @@ const UserID_Rides = require('./src/models/userid_rides.js');
 const Cards = require('./src/models/cards.js');
 const CardID_Rides = require('./src/models/cardid_rides.js');
 const Lines_Station = require('./src/models/lines_station.js');
+const Station_Buses = require('./src/models/station_buses.js');
 const { get } = require('http');
 const { stat } = require('fs');
   
@@ -57,6 +58,34 @@ const modifyStation = async (station_english_name, updatedDetails) => {
     } catch (error) {
       console.error('Error updating station:', error);
     }
+  };
+
+  const modifyStationName = async (station_english_name, newName) => {
+    try {
+      // Find the station by its English name
+      const station = await Station.findOne({
+          where: { station_english_name: station_english_name },
+      });
+  
+      if (!station) {
+          console.log(`Station with English name "${station_english_name}" not found.`);
+          return;
+      }
+  
+      await station.update({ station_english_name: newName });
+      const stationsToUpdate = await Lines_Station.findAll({
+          where: { station_name: station_english_name }, // Use the correct field here
+      });
+  
+      for (const st of stationsToUpdate) {
+          await st.update({ station_name: newName });
+      }
+
+  
+      console.log('Station updated successfully:', station.toJSON());
+  } catch (error) {
+      console.error('Error updating station:', error);
+  }  
   };
 
 
@@ -534,5 +563,31 @@ const modifyPosition = async (lineName, stationName, position) => {
   }
 }
 
+const getBusesAtStations = async (station1, station2) => {
+  try {
+    // Ensure the self-join association is defined
+    Station_Buses.hasMany(Station_Buses, { foreignKey: 'bus_info', as: 't2' });
 
-modifyPosition('1号线', 'Laojie', 3);
+    const query = `
+      SELECT DISTINCT t1.bus_name, t1.bus_info
+      FROM station_buses AS t1
+      JOIN station_buses AS t2 ON t1.bus_info = t2.bus_info
+      WHERE t1.station_name = :station1 AND t2.station_name = :station2;
+    `;
+
+    const buses = await sequelize.query(query, {
+      replacements: { station1, station2 },
+      type: Sequelize.QueryTypes.SELECT,
+    });
+
+    console.log('Buses:', buses);
+    return buses;
+  } catch (error) {
+    console.error('Error fetching buses:', error);
+    return null;
+  }
+};
+
+  
+
+getBusesAtStations('Airport', 'Airport East');
