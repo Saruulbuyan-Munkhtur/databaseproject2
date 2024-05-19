@@ -1,6 +1,7 @@
 import React from 'react';
 import './lines.css';
 
+
 const colorMap = {
   绿色: 'Green',
   暗橙色: 'Orange',
@@ -21,7 +22,7 @@ const colorMap = {
 
 const LineItem = ({ line, onSelect }) => {
   const translatedColor = colorMap[line.color] || line.color;
-
+  console.log("line item lineName: ", line.line_name)
   return (
     <div className="line-item" onClick={() => onSelect(line)}>
       <div className="line-icon">

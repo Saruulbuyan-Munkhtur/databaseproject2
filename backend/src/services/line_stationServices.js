@@ -9,6 +9,16 @@ exports.getAllLinesStations = async () => {
   }
 };
 
+
+exports.getLineStations = async (lineName) => {
+	try {
+	  const lineStations = await Lines_Station.findAll({ where: { line_name: lineName } });
+	  return lineStations;
+	} catch (error) {
+	  throw new Error('Failed to retrieve stations for the line');
+	}
+      };
+
 exports.getLineStationById = async (lineName, stationName) => {
   try {
     const lineStation = await Lines_Station.findOne({ where: { line_name: lineName, station_name: stationName } });

@@ -2,7 +2,7 @@ import api from './api';
 
 export const getLines = async () => {
 	try {
-	  const response = await api.get('/lines');
+	  const response = await api.get('/line');
 	  console.log('Response:', response);
 	  console.log('Response Data:', response.data);
 	  return response.data;
@@ -14,7 +14,7 @@ export const getLines = async () => {
 
 export const getLineById = async (id) => {
   try {
-    const response = await api.get(`/lines/${id}`);
+    const response = await api.get(`/line/${id}`);
     return response.data;
   } catch (error) {
     throw new Error('Failed to fetch line details');
@@ -23,7 +23,7 @@ export const getLineById = async (id) => {
 
 export const createLine = async (lineData) => {
   try {
-    const response = await api.post('/lines', lineData);
+    const response = await api.post('/line', lineData);
     return response.data;
   } catch (error) {
     throw new Error('Failed to create line');
@@ -32,7 +32,7 @@ export const createLine = async (lineData) => {
 
 export const updateline = async (id, lineData) => {
   try {
-    const response = await api.put(`/lines/${id}`, lineData);
+    const response = await api.put(`/line/${id}`, lineData);
     return response.data;
   } catch (error) {
     throw new Error('Failed to update line');
@@ -41,7 +41,7 @@ export const updateline = async (id, lineData) => {
 
 export const deleteline = async (id) => {
   try {
-    const response = await api.delete(`/lines/${id}`);
+    const response = await api.delete(`/line/${id}`);
     return response.data;
   } catch (error) {
     throw new Error('Failed to delete line');

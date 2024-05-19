@@ -9,6 +9,17 @@ exports.getAllLinesStations = async (req, res) => {
   }
 };
 
+
+exports.getLineStations = async (req, res) => {
+  try {
+    const { lineName } = req.params;
+    const lineStations = await lineStationService.getLineStations(lineName);
+    res.json(lineStations);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 exports.getLineStationById = async (req, res) => {
   try {
     const { lineName, stationName } = req.params;

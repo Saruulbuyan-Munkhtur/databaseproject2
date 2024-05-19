@@ -13,9 +13,9 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use('/lines', linesRoutes);
+app.use('/line', linesRoutes);
 app.use('/stations', stationRoutes);
-app.use('/line_stations', line_stationRoutes);
+app.use('/lines', line_stationRoutes);
 
 // Sync database and start the server
 sequelize.sync()
