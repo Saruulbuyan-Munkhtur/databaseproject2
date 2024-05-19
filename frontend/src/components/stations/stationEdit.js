@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { updateStation } from '../../services/stationService';
+import './stations.css';
 
 const StationEdit = ({ station, onUpdateStation }) => {
   const [stationData, setStationData] = useState(station);

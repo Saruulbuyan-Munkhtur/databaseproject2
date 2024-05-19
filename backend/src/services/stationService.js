@@ -1,4 +1,7 @@
 const Station = require('../models/stations');
+const Lines_Station = require('../models/lines_station');
+const Sequelize = require('sequelize');
+const { Op } = require('sequelize');
 
 // Create a new station
 async function createStation(stationData) {
@@ -54,15 +57,51 @@ async function updateStation(stationId, stationData) {
 // Delete a station
 async function deleteStation(stationId) {
   try {
-    const station = await Station.findByPk(stationId);
+    // Find the station by its English name
+    console.log("EOIEHOIEFIOHOHO");
+    const station_english_name = stationId;
+    const station = await Station.findOne({
+        where: { station_english_name: station_english_name },
+    });
+
     if (!station) {
-      throw new Error('Station not found');
-    }
-    await station.destroy();
-  } catch (error) {
-    throw new Error('Error deleting station: ' + error.message);
+      console.log(`Station with English name "${station_english_name}" not found.`);
+      return;
   }
+
+    const stationOnLine = await Lines_Station.findAll({
+      where: {
+        station_name: station_english_name,
+      }
+    });
+
+    // Get the station's position
+    for(const stations of stationOnLine) {
+      const stationPosition = stations.position;
+      const stationsToUpdate = await Lines_Station.findAll({
+        where: {
+            line_name: stations.line_name,
+            position: { [Sequelize.Op.gt]: stationPosition }
+        },
+        order: [['position', 'ASC']]
+    });
+      y = stations.position;
+      for (const stationToUpdate of stationsToUpdate) {
+        await stationToUpdate.update({ position: y});
+        y++;
+      }
+      stations.destroy();
+    }
+
+    // Delete the station
+    await station.destroy();
+
+    console.log('Station destroyed:', station.toJSON());
+} catch (error) {
+    console.error('Error deleting station:', error);
 }
+};
+
 
 module.exports = {
   createStation,

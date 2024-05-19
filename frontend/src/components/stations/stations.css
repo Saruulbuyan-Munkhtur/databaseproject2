@@ -4,121 +4,89 @@
       
       .stations h2 {
 	font-size: 24px;
-	margin-bottom: 10px;
-      }
-      
-      .station-list {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-      }
-      
-      .station-item {
-	background-color: #f2f2f2;
-	border-radius: 4px;
-	padding: 20px;
 	margin-bottom: 20px;
-      }
-      
-      .station-item h3 {
-	font-size: 18px;
-	margin-bottom: 10px;
-      }
-      
-      .station-item p {
-	font-size: 14px;
-	margin-bottom: 5px;
-      }
-      .stations {
-	padding: 20px;
-      }
-      
-      .stations h2 {
-	font-size: 24px;
-	margin-bottom: 20px;
+	color: #333;
       }
       
       .station-list {
 	list-style-type: none;
 	padding: 0;
 	margin: 0;
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-	grid-gap: 20px;
       }
+      
       .station-item {
-	background-color: #f5f5f5;
+	background-color: #fff;
 	border-radius: 4px;
 	padding: 20px;
 	margin-bottom: 20px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	transition: box-shadow 0.3s ease;
       }
       
-      .station-item h3 {
-	font-size: 24px;
-	margin-top: 0;
-	margin-bottom: 10px;
+      .station-item:hover {
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       }
       
-      .station-item p {
-	margin: 0;
+      .station-info h3 {
+	font-size: 20px;
 	margin-bottom: 10px;
+	color: #333;
+      }
+      
+      .station-info p {
+	margin-bottom: 8px;
+	color: #666;
+      }
+      
+      .station-actions {
+	margin-top: 20px;
+      }
+      
+      .details-link,
+      .edit-button,
+      .delete-button {
+	display: inline-block;
+	padding: 10px 20px;
+	border-radius: 1px;
+	text-decoration: none;
+	color: #fff;
+	font-weight:300;
+	margin-right: 10px;
+	transition: opacity 0.3s ease;
       }
       
       .details-link {
-	display: inline-block;
 	background-color: #007bff;
-	color: #fff;
-	text-decoration: none;
-	padding: 8px 16px;
-	border-radius: 4px;
-	margin-top: 10px;
       }
       
-      .details-link:hover {
-	background-color: #0056b3;
+      .edit-button {
+	background-color: #28a745;
       }
       
       .delete-button {
 	background-color: #dc3545;
-	color: #fff;
-	border: none;
-	border-radius: 4px;
-	padding: 8px 16px;
-	margin-top: 10px;
-	cursor: pointer;
       }
       
+      .details-link:hover,
+      .edit-button:hover,
       .delete-button:hover {
-	background-color: #c82333;
+	opacity: 0.8;
       }
       
-      .details-link {
-	display: inline-block;
-	margin-top: 10px;
-	padding: 8px 16px;
-	background-color: #007bff;
-	color: #fff;
-	text-decoration: none;
-	border-radius: 4px;
-	transition: background-color 0.3s ease;
-      }
-      
-      .details-link:hover {
-	background-color: #0056b3;
-      }
       .station-details {
 	padding: 20px;
-	background-color: #f5f5f5;
-	border-radius: 8px;
+	background-color: #fff;
+	border-radius: 4px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
       
       .station-details h2 {
 	font-size: 24px;
 	margin-bottom: 10px;
+	color: #333;
       }
       
       .station-details p {
-	margin-bottom: 5px;
+	margin-bottom: 8px;
+	color: #666;
       }

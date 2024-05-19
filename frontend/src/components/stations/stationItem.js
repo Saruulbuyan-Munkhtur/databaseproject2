@@ -24,28 +24,32 @@ const StationItem = ({ station, onDeleteStation, onEditStation }) => {
 
   return (
     <div className="station-item">
-      <h3>{station.chinese_name}</h3>
-      <p>English Name: {station.station_english_name}</p>
-      <p>District: {station.district}</p>
-      <Link to={`/stations/${station.station_english_name}`} className="details-link">
-        View Details
-      </Link>
-      <button onClick={() => onEditStation(station)} className="edit-button">
-        Edit
-      </button>
-      {!isDeleting && (
-        <button onClick={handleDelete} className="delete-button">
-          Delete
+      <div className="station-info">
+        <h3>{station.station_english_name}</h3>
+        <p>{station.chinese_name}</p>
+        <p>District: {station.district}</p>
+      </div>
+      <div className="station-actions">
+        <Link to={`/stations/${station.station_english_name}`} className="details-link">
+          View Details
+        </Link>
+        <button onClick={() => onEditStation(station)} className="edit-button">
+          Edit
         </button>
-      )}
-      {isDeleting && (
-        <DeleteConfirmation
-          itemId={station.station_english_name}
-          itemType={"station"}
-          onUndo={handleUndo}
-          onDelete={handleConfirmDelete}
-        />
-      )}
+        {!isDeleting && (
+          <button onClick={handleDelete} className="delete-button">
+            Delete
+          </button>
+        )}
+        {isDeleting && (
+          <DeleteConfirmation
+            itemId={station.station_english_name}
+            itemType={"station"}
+            onUndo={handleUndo}
+            onDelete={handleConfirmDelete}
+          />
+        )}
+      </div>
     </div>
   );
 };
