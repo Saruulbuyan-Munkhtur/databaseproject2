@@ -447,13 +447,13 @@ const modifyPosition = async (lineName, stationName, position) => {
       });
 
       let y = position;
+      let pos = des.position;
       for (const stationToUpdate of stationsToUpdate) {
           await stationToUpdate.update({ position: y });
           y++;
       }
 
       // Delete the existing station
-      await des.destroy();
 
       // Update the positions of remaining stations
       if(position == 1){
@@ -486,21 +486,14 @@ const modifyPosition = async (lineName, stationName, position) => {
     } 
 
     }else{
+      if(pos - position > 0){
         const updatedStations = await Lines_Station.findAll({
           where: {
               line_name: lineName,
-              position: { [Sequelize.Op.gt]: position }
+              position: { [Sequelize.Op.between]: [position, pos] }
           },
           order: [['position', 'ASC']]
       });
-
-      const updatedStations2 = await Lines_Station.findAll({
-        where: {
-            line_name: lineName,
-            position: { [Sequelize.Op.lte]: position }
-        },
-        order: [['position', 'DESC']]
-    });
 
       y = position + 1;
       for (const updatedStation of updatedStations) {
@@ -508,13 +501,24 @@ const modifyPosition = async (lineName, stationName, position) => {
           y++;
       }
 
-      y = position - 1;
-      for (const updatedStation of updatedStations2) {
-          await updatedStation.update({ position: y });
-          y--;
+      } else{
+        const updatedStations = await Lines_Station.findAll({
+          where: {
+              line_name: lineName,
+              position: { [Sequelize.Op.between]: [pos, position] }
+          },
+          order: [['position', 'DESC']]
+      });
+
+      p = position;
+      for (const updatedStation of updatedStations) {
+          p--;
+          await updatedStation.update({ position: p });
+      }
       }
 
       }
+      await des.destroy();
 
       // Create a new station
       const newStation = await Lines_Station.create({
@@ -531,4 +535,4 @@ const modifyPosition = async (lineName, stationName, position) => {
 }
 
 
-modifyPosition('1号线', 'Laojie', 30);
+modifyPosition('1号线', 'Laojie', 3);
