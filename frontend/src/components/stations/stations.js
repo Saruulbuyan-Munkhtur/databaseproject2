@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import './stations.css';
-import { getStations, deleteStation } from '../../services/stationServices';
+import { getStations, deleteStation } from '../../services/stationService';
 import StationItem from './stationItem';
 import StationDetails from './stationDetails';
+import StationEdit from './stationEdit';
 
-const Stations = () => {
+const Stations = ({ onEditStation }) => {
   const [stations, setStations] = useState([]);
   const { id } = useParams();
 
@@ -24,7 +25,7 @@ const Stations = () => {
 
   const handleDeleteStation = async (stationId) => {
     try {
-      console.log("handleDeleteStation in station.js: ", id)
+      console.log("handleDeleteStation in station.js: ", id);
       await deleteStation(stationId);
       setStations((prevStations) =>
         prevStations.filter((station) => station.station_english_name !== stationId)
@@ -32,6 +33,14 @@ const Stations = () => {
     } catch (error) {
       console.error('Error deleting station:', error);
     }
+  };
+
+  const handleUpdateStation = (updatedStation) => {
+    setStations((prevStations) =>
+      prevStations.map((station) =>
+        station.station_english_name === updatedStation.station_english_name ? updatedStation : station
+      )
+    );
   };
 
   return (
@@ -47,6 +56,7 @@ const Stations = () => {
                 key={station.station_english_name}
                 station={station}
                 onDeleteStation={() => handleDeleteStation(station.station_english_name)}
+                onEditStation={() => onEditStation(station)}
               />
             ))}
           </ul>

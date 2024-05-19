@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getStationById } from '../../services/stationServices';
+import { getStationById } from '../../services/stationService';
 import './stations.css';
 
 const StationDetails = () => {

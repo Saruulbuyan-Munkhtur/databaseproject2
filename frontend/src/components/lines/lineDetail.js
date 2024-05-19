@@ -29,17 +29,17 @@ const LineDetail = () => {
   }
 
   return (
-    <div className="line-detail">
-      <h2>Stations for Line: {lineName}</h2>
-      {sortedStations.map((station) => (
-        <div key={station.station_name} className="station-item">
-          <h4>{station.station_name}</h4>
-          <p>Position: {station.position}</p>
-          <p>Status: {station.status}</p>
-        </div>
-      ))}
-    </div>
-  );
+	<div className="line-detail">
+	  <h2>Stations for Line: {lineName}</h2>
+	  {sortedStations.map((station) => (
+	    <div key={station.station_name} className="station-item">
+	      <h4>{station.station_name}</h4>
+	      <p>Position: {station.position}</p>
+	      <p className={`status-${station.status.toLowerCase()}`}>Status: {station.status}</p>
+	    </div>
+	  ))}
+	</div>
+      );
 };
 
 export default LineDetail;

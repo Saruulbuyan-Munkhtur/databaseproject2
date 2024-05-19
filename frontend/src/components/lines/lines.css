@@ -68,3 +68,33 @@
 	color: #888;
 	margin-top: 5px;
       }
+      /* LineDetail.css */
+
+      .line-detail {
+	margin: 50px;
+      }
+      
+      .line-detail h2 {
+	font-size: 24px;
+	margin-bottom: 10px;
+      }
+      
+      .station-item {
+	background-color: #f5f5f5;
+	border-radius: 4px;
+	padding: 10px;
+	margin-bottom: 10px;
+      }
+      
+      .station-item h4 {
+	font-size: 18px;
+	margin-bottom: 5px;
+      }
+      
+      .station-item p {
+	margin: 0;
+      }
+      
+      .station-item .status-operational {
+	color: green;
+      }

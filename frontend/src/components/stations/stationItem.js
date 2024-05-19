@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import DeleteConfirmation from '../buttons/deleteConfirmation';
-// import {deleteStation} from '../../services/stationServices';
 import './stations.css';
 
-const StationItem = ({ station, onDeleteStation }) => {
+const StationItem = ({ station, onDeleteStation, onEditStation }) => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = () => {
@@ -17,8 +16,6 @@ const StationItem = ({ station, onDeleteStation }) => {
 
   const handleConfirmDelete = async (stationId) => {
     try {
-      console.log("DIDIDI: ", stationId);
-      // await deleteStation(stationId);
       onDeleteStation(stationId);
     } catch (error) {
       console.error('Error deleting station:', error);
@@ -33,6 +30,9 @@ const StationItem = ({ station, onDeleteStation }) => {
       <Link to={`/stations/${station.station_english_name}`} className="details-link">
         View Details
       </Link>
+      <button onClick={() => onEditStation(station)} className="edit-button">
+        Edit
+      </button>
       {!isDeleting && (
         <button onClick={handleDelete} className="delete-button">
           Delete

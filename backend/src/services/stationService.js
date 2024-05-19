@@ -33,16 +33,20 @@ async function getStationById(stationId) {
   }
 }
 
-// Update a station
 async function updateStation(stationId, stationData) {
   try {
     const station = await Station.findByPk(stationId);
+
     if (!station) {
-      throw new Error('Station not found');
+      console.log('Station not found with ID:', stationId);
+      return null;
     }
-    await station.update(stationData);
-    return station;
+
+    const updatedStation = await station.update(stationData);
+    console.log('Updated station:', updatedStation);
+    return updatedStation;
   } catch (error) {
+    console.error('Error updating station:', error);
     throw new Error('Error updating station: ' + error.message);
   }
 }

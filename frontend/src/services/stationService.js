@@ -32,9 +32,13 @@ export const createStation = async (stationData) => {
 
 export const updateStation = async (id, stationData) => {
   try {
-    const response = await api.put(`/stations/${id}`, stationData);
+    const { district, intro, chinese_name } = stationData;
+    console.log("ID: ", id);
+    const response = await api.put(`/stations/${id}`, { district, intro, chinese_name });
     return response.data;
   } catch (error) {
+    console.error('Error updating station:', error);
+    console.error('Error response:', error.response);
     throw new Error('Failed to update station');
   }
 };

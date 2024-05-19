@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './home.css';
-import { getStations } from '../../services/stationServices';
+import { getStations } from '../../services/stationService';
 
 const Home = () => {
   const [stations, setStations] = useState([]);
