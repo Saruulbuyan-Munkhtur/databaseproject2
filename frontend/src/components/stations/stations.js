@@ -23,6 +23,10 @@ const Stations = ({ onEditStation }) => {
     }
   };
 
+  const handleButtonClick = () => {
+    console.log('Add Station button clicked');
+  };
+
   const handleDeleteStation = async (stationId) => {
     try {
       console.log("handleDeleteStation in station.js: ", id);
@@ -46,6 +50,7 @@ const Stations = ({ onEditStation }) => {
   return (
     <div className="stations">
       <h2>Stations</h2>
+      <button onClick={handleButtonClick}>Add Station</button>
       {stations.length === 0 ? (
         <p>Loading stations...</p>
       ) : (

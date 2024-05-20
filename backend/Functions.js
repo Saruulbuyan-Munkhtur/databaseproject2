@@ -420,6 +420,46 @@ function getAllBoarded(currentTime) {
   });
 }
 
+const multiParamSearch = async (startStation, endStation, startTime, startSymbol, endTime, endSymbol, price, priceSymbol, status) => {
+  if(status == 'ALL'){
+    const query1 = `SELECT * FROM cardid_rides cr JOIN cards c ON cr.user_code = c.code WHERE status = 'EXPIRED' AND status = 'ONGOING'`;
+    const query2 = `SELECT * FROM userid_rides u JOIN passengers p ON u.user_id = p.id_number WHERE status = 'EXPIRED' AND status = 'ONGOING'`;
+  } else if(status == 'ONGOING'){
+    const query1 = `SELECT * FROM cardid_rides cr JOIN cards c ON cr.user_code = c.code WHERE status = 'ONGOING'`;
+    const query2 = `SELECT * FROM userid_rides u JOIN passengers p ON u.user_id = p.id_number WHERE status = 'ONGOING'`;
+  } else {
+    const query1 = `SELECT * FROM cardid_rides cr JOIN cards c ON cr.user_code = c.code WHERE status = 'EXPIRED'`;
+    const query2 = `SELECT * FROM userid_rides u JOIN passengers p ON u.user_id = p.id_number WHERE status = 'EXPIRED'`;
+  }
+
+  if(startStation != null){
+    query1+= `AND start_station = '${startStation}'`;
+    query2+= `AND start_station = '${startStation}'`;
+  }
+  if(endStation != null){
+    query1+= `AND end_station = '${endStation}'`;
+    query2+= `AND end_station = '${endStation}'`;
+  }
+  if(price != null){
+    if(priceSymbol == '='){
+      query1+= `AND price = '${price}'`;
+      query2+= `AND price = '${price}'`;
+    } else if(priceSymbol == '<'){
+      query1+= `AND price < '${price}'`;
+      query2+= `AND price < '${price}'`;
+    } else if(priceSymbol == '>'){
+      query1+= `AND price > '${price}'`;
+      query2+= `AND price > '${price}'`;
+    } else if(priceSymbol == '<='){
+      query1+= `AND price <= '${price}'`;
+      query2+= `AND price <= '${price}'`;
+    } else if(priceSymbol == '>='){
+      query1+= `AND price >= '${price}'`;
+      query2+= `AND price >= '${price}'`;
+    }
+  } 
+}
+
 
 //Miscellaneous functions
 
@@ -565,7 +605,6 @@ const modifyPosition = async (lineName, stationName, position) => {
 
 const getBusesAtStations = async (station1, station2) => {
   try {
-    // Ensure the self-join association is defined
     Station_Buses.hasMany(Station_Buses, { foreignKey: 'bus_info', as: 't2' });
 
     const query = `
@@ -587,6 +626,15 @@ const getBusesAtStations = async (station1, station2) => {
     return null;
   }
 };
+
+const modifyStationStatus = async (lineName, stationName, newStatus) => {
+  const station = Lines_Station.findOne({
+    where: {line_name: lineName,
+    station_name: stationName,}
+  })
+
+  await station.update({status: newStatus});
+}
 
   
 

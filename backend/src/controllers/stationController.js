@@ -76,3 +76,18 @@ exports.deleteStation = async (req, res) => {
     res.status(500).json({ error: 'Failed to delete station' });
   }
 };
+
+exports.addStation = async (lineName, stationName, district, intro, chineseName, position, status) => {
+  try {
+    const newStation = await Station.create({
+      station_english_name: stationName,
+      district: district,
+      intro: intro,
+      chinese_name: chineseName
+    });
+    console.log('Data inserted successfully:', newStation.toJSON());
+  } catch (error) {
+    console.error('Error inserting data:', error);
+  }
+  await placeStationsOnLine(lineName, [stationName], position, status);
+};
