@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import Lines from '../components/lines/line';
 import LineDetail from '../components/lines/lineDetail';
-import { getLines } from '../services/lineService';
+import { getLines, createLine } from '../services/lineService';
 
 const LinesPage = () => {
   const [lines, setLines] = useState([]);
@@ -45,6 +45,18 @@ const LinesPage = () => {
 
   const sortedLines = sortLines(lines);
 
+  const handleCreateLine = async (formData) => {
+    try {
+      const { lineName, intro, mileage, color, first_opening, url, start, end } = formData;
+      const newLine = await createLine(lineName, intro, mileage, color, first_opening, url, start, end);
+      console.log(newLine);
+      // Update the lines state or refetch the lines data
+      // ...
+    } catch (error) {
+      console.error('Error creating line:', error);
+    }
+  };
+
   return (
     <Routes>
       <Route
@@ -55,6 +67,7 @@ const LinesPage = () => {
             sortOption={sortOption}
             handleSortChange={handleSortChange}
             handleLineSelect={handleLineSelect}
+            handleCreateLine={handleCreateLine}
           />
         }
       />

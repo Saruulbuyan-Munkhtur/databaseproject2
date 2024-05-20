@@ -13,7 +13,8 @@ export const getLine = async (lineName) => {
 	try {
 	  console.log("getLine: ", lineName);
 	  const encodedLineName = encodeURIComponent(lineName);
-	  const response = await api.get(`/lines/${encodedLineName}`);
+	  const response = await api.get(`/lines/${lineName}`);
+	  console.log("response", response);
 	  return response.data;
 	} catch (error) {
 	  throw new Error('Failed to fetch line stations');

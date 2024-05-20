@@ -25,8 +25,9 @@ exports.getLineByName = async (req, res) => {
 
 exports.createLine = async (req, res) => {
   try {
-    const lineData = req.body;
-    const createdLine = await linesService.createLine(lineData);
+    console.log("EOIFHWEOIFHOWI");
+    const { lineName, intro, mileage, color, first_opening, url, start,end } = req.body;
+    const createdLine = await linesService.createLine(lineName, intro, mileage, color, first_opening, url, start,end);
     res.status(201).json(createdLine);
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });

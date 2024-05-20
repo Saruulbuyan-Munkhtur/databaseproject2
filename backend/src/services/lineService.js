@@ -18,12 +18,21 @@ exports.getLineByName = async (lineName) => {
   }
 };
 
-exports.createLine = async (lineData) => {
+exports.createLine = async (lineName, intro, mileage, color, first_opening, url, start,end) => {
   try {
-    const createdLine = await Lines.create(lineData);
-    return createdLine;
+    const newLine = await Lines.create({
+      line_name: lineName,
+      intro: intro,
+      mileage: mileage,
+      color: color,
+      first_opening: first_opening,
+      url: url,
+      start_time: start,
+      end_time: end,
+    });
+    console.log('Data inserted successfully:', newLine.toJSON());
   } catch (error) {
-    throw new Error('Failed to create line');
+    console.error('Error inserting data:', error);
   }
 };
 

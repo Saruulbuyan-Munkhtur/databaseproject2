@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LineItem from './lineItem';
+import CreateLineForm from './createLineForm';
 import './lines.css';
 
-const Lines = ({ lines, sortOption, handleSortChange, handleLineSelect }) => {
+const Lines = ({ lines, sortOption, handleSortChange, handleLineSelect, handleCreateLine }) => {
+  const [isCreateLinePopupOpen, setIsCreateLinePopupOpen] = useState(false);
+
+  const handleCreateLineClick = () => {
+    setIsCreateLinePopupOpen(true);
+  };
+
+  const handleCreateLineClose = () => {
+    setIsCreateLinePopupOpen(false);
+  };
+
   return (
     <div className="lines-page">
       <h1>Subway Lines</h1>
@@ -15,10 +26,20 @@ const Lines = ({ lines, sortOption, handleSortChange, handleLineSelect }) => {
       </div>
       <div className="line-list">
         {lines.map((line) => (
-		console.log("LINES: ", line.line_name),
           <LineItem key={line.line_name} line={line} onSelect={() => handleLineSelect(line)} />
         ))}
       </div>
+      <button className="create-line-button" onClick={handleCreateLineClick}>
+        Create Line
+      </button>
+      {isCreateLinePopupOpen && (
+        <div className="create-line-popup">
+          <div className="create-line-popup-content">
+            <h2>Create New Line</h2>
+            <CreateLineForm onSubmit={handleCreateLine} onClose={handleCreateLineClose} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

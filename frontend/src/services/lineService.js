@@ -21,9 +21,9 @@ export const getLineById = async (id) => {
   }
 };
 
-export const createLine = async (lineData) => {
+export const createLine = async (lineName, intro, mileage, color, first_opening, url, start,end) => {
   try {
-    const response = await api.post('/line', lineData);
+    const response = await api.post('/line', {lineName, intro, mileage, color, first_opening, url, start,end});
     return response.data;
   } catch (error) {
     throw new Error('Failed to create line');
