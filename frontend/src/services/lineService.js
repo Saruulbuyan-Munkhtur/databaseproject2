@@ -41,6 +41,7 @@ export const updateline = async (id, lineData) => {
 
 export const deleteline = async (id) => {
   try {
+    console.log("LINENAME: ", id);
     const response = await api.delete(`/line/${id}`);
     return response.data;
   } catch (error) {

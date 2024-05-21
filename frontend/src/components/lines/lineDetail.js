@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { getLine } from '../../services/line_stationService';
-import { getLineById } from '../../services/lineService';
+import { getLineById, deleteline } from '../../services/lineService';
 import './lines.css';
 
-const LineDetail = () => {
+const LineDetail = ({onDelete}) => {
   const location = useLocation();
   const lineName = location.state?.lineName;
+  const navigate = useNavigate();
   const [stations, setStations] = useState([]);
   const [lineDetails, setLineDetails] = useState(null);
   const [showIntro, setShowIntro] = useState(false);
@@ -36,10 +37,22 @@ const LineDetail = () => {
   const toggleIntro = () => {
 	setShowIntro(!showIntro);
       };
+      const handleDelete = async () => {
+	try {
+	  await deleteline(lineName);
+	  onDelete();
+	  navigate('/lines'); // Navigate back to the lines page after successful deletion
+	} catch (error) {
+	  console.error('Error deleting line:', error);
+	}
+      };
 
   return (
 	<div className="line-detail">
       <h2>Line: {lineName}</h2>
+      <button className="delete-button" onClick={handleDelete}>
+            Delete Line
+          </button>
       {lineDetails && (
         <div className="line-info">
           <div className="info-row">

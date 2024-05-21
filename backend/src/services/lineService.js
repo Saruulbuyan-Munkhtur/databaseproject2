@@ -1,4 +1,5 @@
 const Lines = require('../models/lines');
+const Lines_Station = require('../models/lines_station');
 
 exports.getAllLines = async () => {
   try {
@@ -49,15 +50,33 @@ exports.updateLine = async (lineName, updatedData) => {
   }
 };
 
-exports.deleteLine = async (lineName) => {
+exports.deleteLine = async (line_name) => {
   try {
-    const line = await Lines.findByPk(lineName);
-    if (line) {
-      await line.destroy();
-      return line;
+    
+
+    const linesWithStation = await Lines_Station.findAll({
+      where: {
+        line_name: line_name,
+      }
+    })
+    for(const stations of linesWithStation){
+      stations.destroy();
     }
-    return null;
+    // Find the station by its English name
+    console.log("lineService.js: ", line_name);
+    const line = await Lines.findByPk(line_name);
+
+    if (!line) {
+      console.log(`Line with name "${line_name}" not found.`);
+      return;
+    }
+
+    // Update the station with the new details
+    await line.destroy();
+
+    console.log('Line destroyed', line.toJSON());
+    return true;
   } catch (error) {
-    throw new Error('Failed to delete line');
+    console.error('Error updating line:', error);
   }
 };

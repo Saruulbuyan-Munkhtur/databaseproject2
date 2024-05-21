@@ -29,6 +29,9 @@ const LinesPage = () => {
   const handleSortChange = (event) => {
     setSortOption(event.target.value);
   };
+  const handleDeleteLine = () => {
+    fetchLines(); // Refresh the lines data after deletion
+  };
 
   const sortLines = (lines) => {
     return lines.sort((a, b) => {
@@ -50,8 +53,7 @@ const LinesPage = () => {
       const { lineName, intro, mileage, color, first_opening, url, start, end } = formData;
       const newLine = await createLine(lineName, intro, mileage, color, first_opening, url, start, end);
       console.log(newLine);
-      // Update the lines state or refetch the lines data
-      // ...
+      fetchLines();
     } catch (error) {
       console.error('Error creating line:', error);
     }
@@ -71,7 +73,7 @@ const LinesPage = () => {
           />
         }
       />
-      <Route path="/*" element={<LineDetail />} />
+      <Route path="/*" element={<LineDetail onDelete={handleDeleteLine} />} />
     </Routes>
   );
 };
