@@ -6,6 +6,7 @@ import Footer from './components/footer/footer';
 import Home from './components/home/home';
 import LinesPage from './pages/LinesPage';
 import StationsPage from './pages/StationsPage';
+import RidesPage from './pages/RidesPage';
 // import SchedulePage from './pages/SchedulePage';
 
 const App = () => {
@@ -18,7 +19,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/lines/*" element={<LinesPage />} />
             <Route path="/stations/*" element={<StationsPage />} />
-            {/* <Route path="/schedule" element={<SchedulePage />} /> */}
+            <Route path="/rides/*" element={<RidesPage />} />
           </Routes>
         </main>
         <Footer />
