@@ -21,9 +21,10 @@ export const getStationById = async (id) => {
   }
 };
 
-export const createStation = async (stationData) => {
+export const createStation = async (lineName, station_english_name, district, intro, chinese_name, position, status) => {
   try {
-    const response = await api.post('/stations', stationData);
+    console.log("station name: ",station_english_name);
+    const response = await api.post('/stations', {lineName, station_english_name, district, intro, chinese_name, position, status});
     return response.data;
   } catch (error) {
     throw new Error('Failed to create station');

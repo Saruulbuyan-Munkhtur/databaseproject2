@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
+import CreateStationForm from '../components/stations/createStationForm'; // Import the CreateStationForm component
+import { createStation } from '../services/stationService';
 import Stations from '../components/stations/stations';
-import StationDetails from '../components/stations/stationDetails';
-import StationEdit from '../components/stations/stationEdit';
-import { Route, Routes } from 'react-router-dom';
-import './page.css';
-
 const StationsPage = () => {
   const [editingStation, setEditingStation] = useState(null);
+  const [isFormOpen, setIsFormOpen] = useState(false); // State variable to track the visibility of the form
 
   const handleEditStation = (station) => {
     setEditingStation(station);
@@ -16,22 +14,31 @@ const StationsPage = () => {
     setEditingStation(null);
   };
 
+  const handleCreateStation = (formData) => {
+    const {lineName, station_english_name, district, intro, chinese_name, position, status} = formData;
+    // Implement this function to handle the submission of form data
+    console.log("Creating new station with data:", formData);
+    // Call the createStation function from the station service
+    
+    createStation(lineName, station_english_name, district, intro, chinese_name, position, status)
+      .then((newStation) => {
+        console.log("New station created:", newStation);
+        setIsFormOpen(false); // Close the form after successful submission
+      })
+      .catch((error) => {
+        console.error('Error creating station:', error);
+        // Handle error
+      });
+  };
+
   return (
     <div className="stations-page">
       <h1>Stations</h1>
-      <Routes>
-        <Route
-          path="/*"
-          element={
-            editingStation ? (
-              <StationEdit station={editingStation} onUpdateStation={handleUpdateStation} />
-            ) : (
-              <Stations onEditStation={handleEditStation} />
-            )
-          }
-        />
-        <Route path="/:id" element={<StationDetails />} />
-      </Routes>
+      <button onClick={() => setIsFormOpen(true)}>Add Station</button>
+      {isFormOpen && (
+        <CreateStationForm onSubmit={handleCreateStation} onClose={() => setIsFormOpen(false)} />
+      )}
+      <Stations onEditStation={handleEditStation} />
     </div>
   );
 };
