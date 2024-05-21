@@ -10,3 +10,15 @@ exports.getAllRides = async (req, res) => {
     res.status(500).send('Failed to fetch rides');
   }
 };
+
+exports.registerRideUsingCard = async (req, res) => {
+    try{
+        const {ID, StartStation, StartTime, startLine, endLine} = req.body;
+        console.log(StartStation);
+        const newRide = await rideService.registerRideUsingCard(ID, StartStation, StartTime, startLine, endLine);
+        res.json(newRide);
+    } catch (error) {
+        console.error('Error making ride:', error);
+        res.status(500).send('Failed to make ride');
+      }
+}

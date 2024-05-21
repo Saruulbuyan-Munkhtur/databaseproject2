@@ -54,7 +54,7 @@ const registerRideUsingCard = async (ID, StartStation, StartTime, startLine, end
   };
 
 //exit ride
-const exitRide = async (ID, endStation, endTime, startLine, endLine) => {
+const exitRideUsingCard = async (ID, endStation, endTime, startLine, endLine) => {
   try {
     const exitRide = await CardID_Rides.findOne({
       where: { user_code: ID,

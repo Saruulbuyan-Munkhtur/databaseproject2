@@ -3,13 +3,6 @@ const stationService = require('../services/stationService');
 exports.createStation = async (req, res) => {
   try {
     const { lineName, station_english_name, district, intro, chinese_name, position, status } = req.body;
-    console.log(lineName);
-    console.log(station_english_name);
-    console.log(chinese_name);
-    console.log(district);
-    console.log(intro);
-    console.log(position);
-    console.log(status);
     const newStation = await stationService.createStation(lineName, station_english_name, district, intro, chinese_name, position, status);
     res.status(201).json(newStation);
   } catch (error) {

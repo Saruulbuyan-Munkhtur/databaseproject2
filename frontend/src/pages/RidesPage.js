@@ -3,6 +3,7 @@ import CreateStationForm from '../components/stations/createStationForm';
 import Rides from '../components/rides/rides';
 import RideSearch from '../components/rides/RideSearch';
 import { getAllRides } from '../services/rideService';
+import RegisterRideButton from '../components/rides/registerButton';
 
 const RidesPage = () => {
   const [searchParams, setSearchParams] = useState({});
@@ -43,6 +44,7 @@ const RidesPage = () => {
         />
         <button onClick={handleCodeSearch}>Search by Code</button>
       </div>
+      <RegisterRideButton />
       <Rides rides={rides} searchParams={searchParams} />
     </div>
   );
