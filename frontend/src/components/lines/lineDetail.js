@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getLine } from '../../services/line_stationService';
-import { getLineById, deleteline } from '../../services/lineService';
+import { getLineById, deleteline, updateline } from '../../services/lineService';
+import EditLineForm from './editLineForm';
 import './lines.css';
 
 const LineDetail = ({onDelete}) => {
@@ -11,6 +12,7 @@ const LineDetail = ({onDelete}) => {
   const [stations, setStations] = useState([]);
   const [lineDetails, setLineDetails] = useState(null);
   const [showIntro, setShowIntro] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     const fetchStations = async () => {
@@ -46,6 +48,23 @@ const LineDetail = ({onDelete}) => {
 	  console.error('Error deleting line:', error);
 	}
       };
+      const handleEditClick = () => {
+	setIsEditing(true);
+      };
+    
+      const handleEditSubmit = async (updatedLine) => {
+	try {
+	  await updateline(lineName, updatedLine);
+	  setLineDetails(updatedLine);
+	  setIsEditing(false);
+	} catch (error) {
+	  console.error('Error updating line:', error);
+	}
+      };
+    
+      const handleEditClose = () => {
+	setIsEditing(false);
+      };
 
   return (
 	<div className="line-detail">
@@ -53,6 +72,21 @@ const LineDetail = ({onDelete}) => {
       <button className="delete-button" onClick={handleDelete}>
             Delete Line
           </button>
+	  <button className="edit-button" onClick={handleEditClick}>
+            Edit Line
+          </button>
+	  {isEditing && (
+        <div className="edit-line-popup">
+          <div className="edit-line-popup-content">
+            <h2>Edit Line</h2>
+            <EditLineForm
+              line={lineDetails}
+              onSubmit={handleEditSubmit}
+              onClose={handleEditClose}
+            />
+          </div>
+        </div>
+      )}
       {lineDetails && (
         <div className="line-info">
           <div className="info-row">
@@ -100,7 +134,7 @@ const LineDetail = ({onDelete}) => {
           <div key={station.station_name} className="station-item">
             <h4>{station.station_name}</h4>
             <p>Position: {station.position}</p>
-            <p className={`status-${station.status.toLowerCase()}`}>Status: {station.status}</p>
+            <p className={`status ${station.status.toLowerCase()}`}>Status: {station.status}</p>
           </div>
         ))}
       </div>

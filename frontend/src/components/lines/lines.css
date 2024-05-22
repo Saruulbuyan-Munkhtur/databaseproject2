@@ -268,3 +268,59 @@
 	margin-bottom: 20px;
 	color: #333;
       }
+      /* ... existing styles ... */
+
+.edit-button {
+	padding: 8px 16px;
+	background-color: #2196f3;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 14px;
+	transition: background-color 0.3s ease;
+	margin-top: 10px;
+      }
+      
+      .edit-button:hover {
+	background-color: #1976d2;
+      }
+      
+      .edit-line-popup {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 999;
+      }
+      
+      .edit-line-popup-content {
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 4px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+	max-width: 400px;
+	width: 100%;
+      }
+      
+      .edit-line-popup-content h2 {
+	font-size: 20px;
+	margin-bottom: 20px;
+	color: #333;
+      }
+      .status.operational {
+	color: green;
+      }
+      
+      .status.under.construction {
+	color: orange;
+      }
+      
+      .status.planned {
+	color: blue;
+      }
