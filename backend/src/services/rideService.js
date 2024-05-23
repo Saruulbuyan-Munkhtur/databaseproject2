@@ -22,6 +22,17 @@ exports.getAllRides = async () => {
   }
 };
 
+exports.getAllRidesP = async () => {
+  try {
+    const userRides = await UserID_Rides.findAll({
+        where: {status: 'ONGOING'},
+    });
+    return userRides;
+  } catch (error) {
+    throw new Error('Failed to fetch rides');
+  }
+};
+
 exports.registerRideUsingCard = async (ID, StartStation, StartTime, startLine, endLine) => {
     try {
       console.log(ID);
@@ -86,16 +97,15 @@ exports.registerRideUsingPassenger = async (ID, StartStation, StartTime) => {
   }
 };
 
-exports.exitRideUsingPassenger = async (ID, endStation, endTime, startLine, endLine) => {
+exports.exitRideUsingPassenger = async (ID, endStation, endTime) => {
   try {
     const exitRide = await UserID_Rides.findOne({
-      where: { user_id: ID,
-               status: 'ONGOING',
+      where: { ride_id: ID
            },
     });
     const start = await getChineseName(exitRide.start_station);
     const end = await getChineseName(endStation);
-    const JourneyPrice = await getPrice(start, end, startLine, endLine);
+    const JourneyPrice = await getPrice(start, end);
     await exitRide.update({end_station: endStation, end_time: endTime, price: JourneyPrice, status: 'EXPIRED'});
     console.log('Exit Ride:', exitRide.toJSON());
   } catch (error) {
@@ -124,13 +134,12 @@ const getChineseName = async (stationName) => {
     }
   };
   
-  const getPrice = async (startStation, endStation, startLine, endLine) => {
+  const getPrice = async (startStation, endStation) => {
     try {
       const Journey = await Price.findOne({
         where: { start_station: startStation,
         end_station: endStation,
-        start_station_line: startLine,
-        end_station_line: endLine, },
+      },
       });
   
       // Check if station exists and return its Chinese name

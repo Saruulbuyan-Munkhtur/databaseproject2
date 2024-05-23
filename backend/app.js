@@ -22,6 +22,7 @@ app.use('/rides', rideRoutes);
 app.use('/register-ride-using-card', rideRoutes);
 app.use('/register-ride-using-passenger', rideRoutes);
 app.use('/graph', graphRoutes);
+app.use('/exit-using-passenger', rideRoutes)
 
 // Sync database and start the server
 sequelize.sync()
