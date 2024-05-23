@@ -3,6 +3,7 @@ const Lines_Station = require('../models/lines_station');
 const Line = require('../models/lines');
 const Sequelize = require('sequelize');
 const { Op } = require('sequelize');
+const { modifyPosition, modifyStationStatus } = require('../../Functions');
 // Create a new station
 async function createStation(lineName, station_english_name, district, intro, chinese_name, position, status) {
   try {
@@ -42,17 +43,19 @@ async function getStationById(stationId) {
   }
 }
 
-async function updateStation(stationId, stationData) {
+async function updateStation(lineName, station_english_name, district, intro, chinese_name, position, status) {
   try {
-    const station = await Station.findByPk(stationId);
+    const station = await Station.findByPk(station_english_name);
 
     if (!station) {
-      console.log('Station not found with ID:', stationId);
+      console.log('Station not found with ID:', station_english_name);
       return null;
     }
 
-    const updatedStation = await station.update(stationData);
+    const updatedStation = await station.update(station_english_name, district, intro, chinese_name);
     console.log('Updated station:', updatedStation);
+    modifyPosition(lineName, station_english_name, position);
+    modifyStationStatus(lineName, station_english_name, status);
     return updatedStation;
   } catch (error) {
     console.error('Error updating station:', error);

@@ -31,11 +31,10 @@ export const createStation = async (lineName, station_english_name, district, in
   }
 };
 
-export const updateStation = async (id, stationData) => {
+export const updateStation = async (lineName, station_english_name, district, intro, chinese_name, position, status) => {
   try {
-    const { district, intro, chinese_name } = stationData;
-    console.log("ID: ", id);
-    const response = await api.put(`/stations/${id}`, { district, intro, chinese_name });
+    console.log("ID: ", station_english_name);
+    const response = await api.put(`/stations/${station_english_name}`, { lineName, station_english_name, district, intro, chinese_name, position, status });
     return response.data;
   } catch (error) {
     console.error('Error updating station:', error);

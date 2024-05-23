@@ -635,7 +635,7 @@ const modifyStationStatus = async (lineName, stationName, newStatus) => {
 
   await station.update({status: newStatus});
 }
-
+module.exports = {modifyPosition, modifyStationStatus};
   
 
 getBusesAtStations('Airport', 'Airport East');

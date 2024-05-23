@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import DeleteConfirmation from '../buttons/deleteConfirmation';
 import './stations.css';
 
-const StationItem = ({ station, onDeleteStation, onEditStation }) => {
+const StationItem = ({ station, onDeleteStation, onEditStation, onViewDetails }) => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = () => {
@@ -22,6 +22,10 @@ const StationItem = ({ station, onDeleteStation, onEditStation }) => {
     }
   };
 
+  const handleViewDetails = () => {
+    onViewDetails(station);
+  };
+
   return (
     <div className="station-item">
       <div className="station-info">
@@ -30,9 +34,9 @@ const StationItem = ({ station, onDeleteStation, onEditStation }) => {
         <p>District: {station.district}</p>
       </div>
       <div className="station-actions">
-        <Link to={`/stations/${station.station_english_name}`} className="details-link">
+        <button onClick={handleViewDetails} className="details-link">
           View Details
-        </Link>
+        </button>
         <button onClick={() => onEditStation(station)} className="edit-button">
           Edit
         </button>

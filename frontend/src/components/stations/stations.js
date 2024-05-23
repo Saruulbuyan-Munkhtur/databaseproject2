@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import './stations.css';
 import { getStations, deleteStation } from '../../services/stationService';
 import StationItem from './stationItem';
 import StationDetails from './stationDetails';
-import StationEdit from './stationEdit';
 
-const Stations = ({ onEditStation }) => {
+const Stations = ({ onEditStation, onAddStation }) => {
   const [stations, setStations] = useState([]);
-  const { id } = useParams();
+  const [selectedStation, setSelectedStation] = useState(null);
 
   useEffect(() => {
     fetchStations();
@@ -29,7 +27,6 @@ const Stations = ({ onEditStation }) => {
 
   const handleDeleteStation = async (stationId) => {
     try {
-      console.log("handleDeleteStation in station.js: ", id);
       await deleteStation(stationId);
       setStations((prevStations) =>
         prevStations.filter((station) => station.station_english_name !== stationId)
@@ -47,10 +44,15 @@ const Stations = ({ onEditStation }) => {
     );
   };
 
+  const handleViewDetails = (station) => {
+    setSelectedStation(station);
+  };
+
   return (
     <div className="stations">
-      <h2>Stations</h2>
-      <button onClick={handleButtonClick}>Add Station</button>
+      {!selectedStation &&
+      <div>
+      <button onClick={onAddStation}>Add Station</button> 
       {stations.length === 0 ? (
         <p>Loading stations...</p>
       ) : (
@@ -58,16 +60,18 @@ const Stations = ({ onEditStation }) => {
           <ul className="station-list">
             {stations.map((station) => (
               <StationItem
-                key={station.station_english_name}
-                station={station}
-                onDeleteStation={() => handleDeleteStation(station.station_english_name)}
-                onEditStation={() => onEditStation(station)}
+              key={station.station_english_name}
+              station={station}
+              onDeleteStation={() => handleDeleteStation(station.station_english_name)}
+              onEditStation={() => onEditStation(station)}
+              onViewDetails={handleViewDetails}
               />
             ))}
           </ul>
-          {id && <StationDetails />}
         </div>
       )}
+          </div>}
+      {selectedStation && <StationDetails station={selectedStation} />}
     </div>
   );
 };

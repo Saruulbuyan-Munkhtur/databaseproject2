@@ -1,29 +1,48 @@
 import React, { useState } from 'react';
-import CreateStationForm from '../components/stations/createStationForm'; // Import the CreateStationForm component
-import { createStation } from '../services/stationService';
+import CreateStationForm from '../components/stations/createStationForm';
+import StationEdit from '../components/stations/stationEdit';
+import { createStation, updateStation } from '../services/stationService';
 import Stations from '../components/stations/stations';
+
 const StationsPage = () => {
   const [editingStation, setEditingStation] = useState(null);
-  const [isFormOpen, setIsFormOpen] = useState(false); // State variable to track the visibility of the form
+  const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
 
   const handleEditStation = (station) => {
     setEditingStation(station);
+    setIsEditFormOpen(true);
   };
+  const onAddClick = ()=>{
+    setIsCreateFormOpen(true);
+  }
 
-  const handleUpdateStation = (updatedStation) => {
-    setEditingStation(null);
+  const handleUpdateStation = (formData) => {
+    const { id, lineName, station_english_name, district, intro, chinese_name, position, status } = formData;
+
+    console.log("Updating station with data:", formData);
+
+    updateStation(id, lineName, station_english_name, district, intro, chinese_name, position, status)
+      .then((updatedStation) => {
+        console.log("Station updated:", updatedStation);
+        setEditingStation(null);
+        setIsEditFormOpen(false);
+      })
+      .catch((error) => {
+        console.error('Error updating station:', error);
+        // Handle error
+      });
   };
 
   const handleCreateStation = (formData) => {
-    const {lineName, station_english_name, district, intro, chinese_name, position, status} = formData;
-    // Implement this function to handle the submission of form data
+    const { lineName, station_english_name, district, intro, chinese_name, position, status } = formData;
+
     console.log("Creating new station with data:", formData);
-    // Call the createStation function from the station service
-    
+
     createStation(lineName, station_english_name, district, intro, chinese_name, position, status)
       .then((newStation) => {
         console.log("New station created:", newStation);
-        setIsFormOpen(false); // Close the form after successful submission
+        setIsCreateFormOpen(false);
       })
       .catch((error) => {
         console.error('Error creating station:', error);
@@ -34,11 +53,18 @@ const StationsPage = () => {
   return (
     <div className="stations-page">
       <h1>Stations</h1>
-      <button onClick={() => setIsFormOpen(true)}>Add Station</button>
-      {isFormOpen && (
-        <CreateStationForm onSubmit={handleCreateStation} onClose={() => setIsFormOpen(false)} />
+      {/* <button onClick={() => setIsCreateFormOpen(true)}>Add Station</button> */}
+      {isCreateFormOpen && (
+        <CreateStationForm onSubmit={handleCreateStation} onClose={() => setIsCreateFormOpen(false)} />
       )}
-      <Stations onEditStation={handleEditStation} />
+      {isEditFormOpen && (
+        <StationEdit
+          station={editingStation}
+          onSubmit={handleUpdateStation}
+          onClose={() => setIsEditFormOpen(false)}
+        />
+      )}
+      <Stations onEditStation={handleEditStation} onAddStation = {onAddClick} />
     </div>
   );
 };
