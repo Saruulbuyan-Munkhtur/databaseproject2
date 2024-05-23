@@ -37,3 +37,14 @@ exports.exitRideUsingCard = async (req, res) => {
       res.status(500).send('Failed to make ride');
     }
 }
+
+exports.registerRideUsingPassenger = async (req, res) => {
+  try{
+      const {ID, StartStation, StartTime} = req.body;
+      const newRide = await rideService.registerRideUsingPassenger(ID, StartStation, StartTime);
+      res.json(newRide);
+  } catch (error) {
+      console.error('Error making ride:', error);
+      res.status(500).send('Failed to make ride');
+    }
+}
