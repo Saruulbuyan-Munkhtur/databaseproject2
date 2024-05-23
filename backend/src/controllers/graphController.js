@@ -13,8 +13,8 @@ exports.getShortestPath = async (req, res) => {
 exports.getAdjacencyList = async (req, res) => {
   try {
     const { stationName } = req.params;
-    await graphService.getAdjacencyList(stationName);
-    res.sendStatus(200);
+    const adjacencyList = await graphService.getAdjacencyList(stationName);
+    res.status(200).json(adjacencyList);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

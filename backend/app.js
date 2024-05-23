@@ -4,6 +4,7 @@ const linesRoutes = require('./src/routes/lineRoutes');
 const stationRoutes = require('./src/routes/stationRoutes');
 const line_stationRoutes = require('./src/routes/line_stationRoutes');
 const rideRoutes = require('./src/routes/rideRoutes');
+const graphRoutes = require('./src/routes/graphRoutes');
 const cors = require('cors');
 const app = express();
 
@@ -20,6 +21,7 @@ app.use('/lines', line_stationRoutes);
 app.use('/rides', rideRoutes);
 app.use('/register-ride-using-card', rideRoutes);
 app.use('/register-ride-using-passenger', rideRoutes);
+app.use('/graph', graphRoutes);
 
 // Sync database and start the server
 sequelize.sync()

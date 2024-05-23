@@ -1,4 +1,4 @@
-const { buildGraph, shortestPath, printAdjacencyList, modifyStatus } = require('../../Graph');
+const { buildGraph, shortestPath, printAdjacencyList, modifyStatus, getAdjacencyList } = require('../../Graph');
 
 exports.getShortestPath = async (startNodeName, endNodeName) => {
   try {
@@ -11,7 +11,8 @@ exports.getShortestPath = async (startNodeName, endNodeName) => {
 
 exports.getAdjacencyList = async (stationName) => {
   try {
-    await printAdjacencyList(stationName);
+    const adjacencyList = getAdjacencyList(stationName);
+    return adjacencyList;
   } catch (error) {
     throw new Error('Failed to get adjacency list');
   }

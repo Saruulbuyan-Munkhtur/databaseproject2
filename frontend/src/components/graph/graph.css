@@ -1,0 +1,12 @@
+.path-container {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 20px;
+      }
+      
+      .arrow {
+	font-size: 20px;
+	margin: 0 10px;
+      }

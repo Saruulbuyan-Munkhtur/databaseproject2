@@ -11,7 +11,9 @@ export const getShortestPath = async (startNodeName, endNodeName) => {
 
 export const getAdjacencyList = async (stationName) => {
   try {
-    await api.get(`/graph/adjacency-list/${stationName}`);
+    const response = await api.get(`/graph/adjacency-list/${stationName}`);
+    console.log(response);
+    return response.data;
   } catch (error) {
     throw new Error('Failed to fetch adjacency list');
   }

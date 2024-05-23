@@ -14,6 +14,7 @@ const Header = () => {
           <li><a href="/stations">Stations</a></li>
           <li><a href="/rides">Rides</a></li>
           <li><a href="/schedule">Schedule</a></li>
+          <li><a href="/graphs">GRAPH</a></li>
         </ul>
       </nav>
     </header>

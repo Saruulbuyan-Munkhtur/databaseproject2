@@ -184,6 +184,20 @@ class Node {
             console.error('Error:', error);
         }
     }
+    async function getAdjacencyList(stationName) {
+        try {
+          const graph = await buildGraph(Lines_Station);
+          if (graph.has(stationName)) {
+            const stationNode = graph.get(stationName);
+            const adjacencyList = Array.from(stationNode.adj.keys());
+            return adjacencyList;
+          } else {
+            throw new Error(`Station '${stationName}' not found in the graph.`);
+          }
+        } catch (error) {
+          throw new Error(`Error getting adjacency list: ${error.message}`);
+        }
+      }
 
     shortestPath('Wuhe', 'Huangbeiling')
     .then((path) => {
@@ -194,6 +208,6 @@ class Node {
     });
 
 
-module.exports = {printAdjacencyList, modifyStatus, shortestPath, buildGraph};
+module.exports = {printAdjacencyList, modifyStatus, shortestPath, buildGraph, getAdjacencyList};
     
 
