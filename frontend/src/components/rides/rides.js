@@ -1,20 +1,30 @@
 import React from 'react';
 import './rides.css';
+import ExitRideUsingCardButton from './ExitRideUsingCardButton';
+import RegisterRideButton from './registerButton';
 
 const Rides = ({ rides }) => {
-  const displayedRides = rides.slice(0, 10); 
+  const displayedRides = rides.slice(0, 10);
 
   return (
-    <div>
+    <div className="rides-container">
+      <h2 className="rides-header">Ongoing Rides</h2>
+      <div className="rides-header2">
+        <p>User</p>
+        <p>Start</p>
+        <p>End</p>
+        <p>Price</p>
+      </div>
       {displayedRides.length > 0 ? (
-        <ul>
+        <ul className="ride-list">
           {displayedRides.map((ride) => (
-            <li key={ride.user_code}>
-              {/* Display relevant ride information here */}
-              <p>Start: {ride.start_station}</p>
-              <p>End: {ride.end_station}</p>
-              <p>Price: {ride.price}</p>
-              {/* Add other ride details as needed */}
+            <li key={ride.user_code} className="ride-item">
+              <p>{ride.ride_id}</p>
+              <p className='display-code'>{ride.user_code}</p>
+              <p className='display-start'>{ride.start_station}</p>
+              <p className='display-end'>{ride.end_station}</p>
+              <p className='display-price'>{ride.price}</p>
+              <ExitRideUsingCardButton rideId={ride.ride_id} code={ride.user_code} />
             </li>
           ))}
         </ul>

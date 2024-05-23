@@ -45,15 +45,16 @@ exports.registerRideUsingCard = async (ID, StartStation, StartTime, startLine, e
   };
 
 //exit ride
-exports.exitRideUsingCard = async (ID, endStation, endTime, startLine, endLine) => {
+exports.exitRideUsingCard = async (id, ID, endStation, startLine, endTime, endLine) => {
   try {
     const exitRide = await CardID_Rides.findOne({
-      where: { user_code: ID,
-               status: 'ONGOING',
+      where: { ride_id: id,
            },
     });
+    
     const start = await getChineseName(exitRide.start_station);
     const end = await getChineseName(endStation);
+    console.log(startLine);
     const JourneyPrice = await getPrice(start, end, startLine, endLine);
     await exitRide.update({end_station: endStation, end_time: endTime, price: JourneyPrice, status: 'EXPIRED'});
     console.log('Exit Ride:', exitRide.toJSON());

@@ -142,6 +142,169 @@ body, h1, ul {
   }
   
   .register-ride-form button {
-	margin-right: 10px;
+	background-color: red; /* Green background */
+	border: none; /* Remove borders */
+	color: white; /* White text */
+	padding: 12px 32px; /* Some padding */
+	text-align: center; /* Center the text */
+	text-decoration: none; /* Remove underline */
+	display: inline-block; /* Get the element to line up nicely */
+	font-size: 16px; /* Increase font size */
+	margin: 4px 2px; /* Add some margin */
+	cursor: pointer; /* Pointer/hand icon */
+	border-radius: 12px; /* Rounded corners */
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+	transition: background-color 0.3s ease, transform 0.2s ease;
   }
+  
+  .register-ride-form button:hover {
+	transform: scale(1.05); /* Slightly larger on hover */
+  }
+  
+  .register-ride-form button:active {
+	background-color: #c9302c; /* Even darker red on click */
+	transform: scale(0.95); /* Slightly smaller on click */
+  }
+  
+  .rides-container {
+	width: 100%;
+  }
+  
+  .ride-list {
+	list-style: none;
+	padding: 0;
+	display: flex; /* Make the list items display horizontally */
+	flex-wrap: wrap; /* Allow wrapping if the items exceed the container width */
+	width: 200vw; /* Stretch the list across the page horizontally */
+	word-spacing: 100px;
+
+  }
+  
+  .ride-item {
+	background-color: #fff;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	padding: 20px;
+	margin-right: 20px; /* Add some space between items */
+	margin-bottom: 20px;
+	border-radius: 4px;
+	transition: box-shadow 0.3s ease;
+	display: flex; /* Ensure each ride item is displayed as a flex container */
+	width: calc(25% - 20px); /* Adjust the width of each item to fit 4 items per row */
+  }
+  
+  .ride-item p {
+	flex: 1; /* Distribute available space evenly among paragraphs */
+  }  
+  
+  
+  .ride-item:hover {
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .ride-item p {
+	margin-right: 20px; /* Add space between paragraphs */
+  }
+  
+  .exit-ride-button {
+	background-color: #007bff;
+	color: black;
+	border: none;
+	border-radius: 4px;
+	padding: 8px 16px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+  }
+  
+  .exit-ride-button:hover {
+	background-color: #0056b3;
+  }
+  
+  .rides-header2 {
+  display: flex;
+  align-items: center; /* Vertically center the header content */
+  padding-left: 50px;
+  gap: 110px; /* Adjust the space between columns */
+  font-weight: bold; /* Make the headers bold */
+}
+
+.rides-header {
+	background-color: #555;
+	padding: 10px 20px; /* Add padding for spacing */
+	color: #fff; /* White text color */
+	border-radius: 4px; /* Rounded corners */
+  }
+  
+
+  .exit-ride-form {
+	background: white;
+	padding: 20px;
+	border-radius: 5px;
+	max-width: 400px;
+	width: 100%;
+	word-spacing: 0.5px;
+  }
+  
+  .modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+  }
+  
+  .exit-ride-form {
+	background: white;
+	padding: 20px;
+	border-radius: 5px;
+	max-width: 400px;
+	width: 100%;
+  }
+  
+  .exit-ride-form div {
+	margin-bottom: 10px;
+  }
+  
+  .exit-ride-form label {
+	display: block;
+	margin-bottom: 5px;
+  }
+  
+  .exit-ride-form input {
+	width: 100%;
+	padding: 8px;
+	box-sizing: border-box;
+  }
+  
+  .exit-ride-form button {
+	background-color: red;
+	border: none;
+	color: white;
+	padding: 12px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	cursor: pointer;
+	border-radius: 12px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .exit-ride-form button:hover {
+	transform: scale(1.05);
+  }
+  
+  .exit-ride-form button:active {
+	background-color: #c9302c;
+	transform: scale(0.95);
+  }
+  
+  
+
+
   
