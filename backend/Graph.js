@@ -193,5 +193,7 @@ class Node {
         console.error(err);
     });
 
+
+module.exports = {printAdjacencyList, modifyStatus, shortestPath, buildGraph};
     
 
