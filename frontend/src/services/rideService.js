@@ -10,10 +10,20 @@ export const getAllRides = async () => {
   }
 };
 
+export const getAllRidesP = async () => {
+  try {
+    const response = await api.get('/rides/get-all-rides-passenger');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching rides:', error);
+    throw new Error('Failed to fetch rides');
+  }
+};
+
 export const registerRideUsingCard = async (ID, StartStation, StartTime, startLine, endLine) => {
     try{
         console.log(StartStation);
-        const response = await api.post('/rides', {ID, StartStation, StartTime, startLine, endLine});
+        const response = await api.post('/rides/register-ride-using-card', { ID, StartStation, StartTime, startLine, endLine });
         return response.data;
     } catch(error) {
         throw new Error('Failed to create ride');
@@ -22,13 +32,39 @@ export const registerRideUsingCard = async (ID, StartStation, StartTime, startLi
 
 export const exitRideUsingCard = async (id, ID, EndStation, StartLine, EndTime, endLine) => {
   try {
-    console.log(id);
-    console.log(ID);
-    console.log(EndStation);
-    console.log(StartLine);
-    const response = await api.put(`/rides/${id}`, { ID, EndStation, StartLine, EndTime, endLine });
+    const response = await api.put(`/rides/exit-using-card${id}`, { ID, EndStation, StartLine, EndTime, endLine });
     return response.data;
   } catch (error) {
     throw new Error('Failed to exit ride');
+  }
+}
+
+export const registerRideUsingPassenger = async (ID, StartStation, StartTime) => {
+  try{
+    const response = await api.post('/rides/register-ride-using-passenger', { ID, StartStation, StartTime });
+      return response.data;
+  } catch(error) {
+      throw new Error('Failed to create ride');
+  }
+}
+
+export const exitRideUsingPassenger = async (id, EndStation, EndTime) => {
+  try {
+    console.log(id);
+    const response = await api.put(`/rides/exit-using-passenger/${id}`, { EndStation, EndTime });
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to exit ride');
+  }
+}
+
+
+export const nthParamSearch = async (startStation, endStation, minStartTime, maxStartTime, minEndTime, maxEndTime, minPrice, maxPrice, status ) => {
+  try {
+    console.log(minStartTime);
+    const response = await api.post('/rides/nth-param-search', { startStation, endStation, minStartTime, maxStartTime, minEndTime, maxEndTime, minPrice, maxPrice, status });
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to retrieve rides');
   }
 }

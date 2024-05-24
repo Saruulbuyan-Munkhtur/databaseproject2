@@ -184,3 +184,59 @@ const getChineseName = async (stationName) => {
       throw error;
     }
   }
+
+  exports.nthParamSearch = async (startStation, endStation, minStartTime, maxStartTime, minEndTime, maxEndTime, minPrice, maxPrice, status) => {
+    let query1 = `SELECT * FROM cardid_rides cr JOIN cards c on cr.user_code = c.code WHERE ride_id > 0 `;
+    let query2 = `SELECT * FROM userid_rides u JOIN passengers p ON u.user_id = p.id_number WHERE ride_id > 0 `;
+
+    if(minStartTime !== ''){
+      query1 += `AND start_time >= '${minStartTime}' `;
+      query2 += `AND start_time >= '${minStartTime}' `;
+    }
+    if(maxStartTime !== ''){
+      query1 += `AND start_time >= '${maxStartTime}' `;
+      query2 += `AND start_time >= '${maxStartTime}' `;
+    }
+    if(minEndTime !== ''){
+      query1 += `AND end_time >= '${minEndTime}' `;
+      query2 += `AND end_time >= '${minEndTime}' `;
+    }
+    if(maxEndTime !== ''){
+      query1 += `AND end_time >= '${maxEndTime}' `;
+      query2 += `AND end_time >= '${maxEndTime}' `;
+    }
+    
+    if(status == ''){
+        query1 += `AND status IN ('ONGOING', 'EXPIRED') `;
+        query2 += `AND status IN ('ONGOING', 'EXPIRED') `;
+    } else if(status == 'ONGOING'){
+        query1 += `AND status = 'ONGOING' `;
+        query2 += `AND status = 'ONGOING' `;
+    } else {
+        query1 += `AND status = 'EXPIRED' `;
+        query2 += `AND status = 'EXPIRED' `;
+    }
+  
+    if(startStation !== ''){
+        query1 += `AND start_station = '${startStation}' `;
+        query2 += `AND start_station = '${startStation}' `;
+    }
+    if(endStation !== ''){
+        query1 += `AND end_station = '${endStation}' `;
+        query2 += `AND end_station = '${endStation}' `;
+    }
+
+    if(minPrice !== ''){
+      query1 += `AND price >= '${minPrice}' `;
+      query2 += `AND price >= '${minPrice}' `;
+    }
+    if(maxPrice !== ''){
+      query1 += `AND price <= '${maxPrice}' `;
+      query2 += `AND price <= '${maxPrice}' `;
+    }
+
+    const [result1] = await sequelize.query(query1);
+    const [result2] = await sequelize.query(query2);
+    console.log(result2);
+    return { result1, result2 };
+}

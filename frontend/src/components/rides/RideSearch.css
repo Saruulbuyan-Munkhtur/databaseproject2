@@ -1,0 +1,89 @@
+.ride-search-container {
+    position: relative;
+    width: 300px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: height 0.3s ease;
+  }
+  
+  .ride-search-container.open {
+    height: 45px; /* Adjust height as needed */
+  }
+  
+  .open-search-button {
+    background-color: #555;
+    color: #fff;
+    border: none;
+    padding: 5px 105px; 
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  
+  
+  .ride-search {
+    padding: 20px;
+  }
+  
+  .ride-search h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .ride-search label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .ride-search input[type="text"],
+  .ride-search input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-bottom: 15px;
+  }
+  
+  .search-button {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .search-button:hover {
+    background-color: #218838;
+  }
+  
+
+.price-range {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+  }
+  
+  .price-range label {
+    margin-bottom: 5px;
+  }
+  
+  .price-range input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-bottom: 15px;
+  }
+
+  

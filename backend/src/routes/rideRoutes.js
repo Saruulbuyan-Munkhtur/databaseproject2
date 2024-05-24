@@ -4,6 +4,7 @@ const rideController = require('../controllers/rideController');
 
 router.get('/', rideController.getAllRides);
 router.get('/get-all-rides-passenger', rideController.getAllRidesP);
+router.post('/nth-param-search', rideController.nthParamSearch);
 router.post('/register-ride-using-card', rideController.registerRideUsingCard);
 router.post('/register-ride-using-passenger', rideController.registerRideUsingPassenger);
 router.put('/exit-using-card/:ride_id', rideController.exitRideUsingCard);

@@ -71,3 +71,18 @@ exports.exitRideUsingPassenger = async (req, res) => {
       res.status(500).send('Failed to make ride');
     }
 }
+
+exports.nthParamSearch = async (req, res) => {
+  try{
+      const {startStation, endStation, minStartTime, maxStartTime, minEndTime, maxEndTime, minPrice, maxPrice, status} = req.body;
+      console.log(minStartTime);
+      console.log(maxStartTime);
+      console.log(minEndTime);
+      console.log(maxEndTime);
+      const newRide = await rideService.nthParamSearch(startStation, endStation, minStartTime, maxStartTime, minEndTime, maxEndTime, minPrice, maxPrice, status);
+      res.json(newRide);
+  } catch (error) {
+      console.error('Error making ride:', error);
+      res.status(500).send('Failed to make ride');
+    }
+}
