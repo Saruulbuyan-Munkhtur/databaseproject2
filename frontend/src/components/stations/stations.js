@@ -61,7 +61,7 @@ const Stations = ({ onEditStation, onAddStation }) => {
             {stations.map((station) => (
               <StationItem
               key={station.station_english_name}
-              station={station}
+              stationName={station.station_english_name}
               onDeleteStation={() => handleDeleteStation(station.station_english_name)}
               onEditStation={() => onEditStation(station)}
               onViewDetails={handleViewDetails}

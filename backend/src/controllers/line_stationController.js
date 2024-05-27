@@ -34,6 +34,22 @@ exports.getLineStationById = async (req, res) => {
   }
 };
 
+exports.getLineByStation = async (req, res) => {
+  try {
+    const { stationName } = req.params;
+    if (!stationName) {
+      return res.status(400).json({ error: 'Station name is required' });
+    }
+    const lineStations = await lineStationService.getLineByStation(stationName);
+    if (lineStations.length > 0) {
+      res.json(lineStations);
+    } else {
+      res.status(404).json({ error: 'No line stations found for the given station name' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to retrieve line stations' });
+  }
+};
 exports.createLineStation = async (req, res) => {
   try {
     const lineStationData = req.body;

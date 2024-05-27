@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './home.css';
 import { getStations } from '../../services/stationService';
+import StationItem from '../stations/stationItem';
 
 const Home = () => {
   const [stations, setStations] = useState([]);
@@ -9,7 +10,7 @@ const Home = () => {
     const fetchStations = async () => {
       try {
         const data = await getStations();
-	console.log(data);
+        console.log(data);
         setStations(data);
       } catch (error) {
         console.error('Error fetching stations:', error);
@@ -32,16 +33,17 @@ const Home = () => {
         {stations.length === 0 ? (
           <p>Loading stations...</p>
         ) : (
-		<div className="station-grid">
-		{stations.slice(0, 3).map((station) => (
-		  <div key={station.station_english_name} className="station-card">
-		    <h3>{station.chinese_name}</h3>
-		    <p>English Name: {station.station_english_name}</p>
-		    <p>District: {station.district}</p>
-		    <p>Introduction: {station.intro}</p>
-		  </div>
-		))}
-	      </div>
+          <div className="station-grid">
+            {stations.slice(0, 3).map((station) => (
+              <StationItem
+                key={station.station_english_name}
+                stationName={station.station_english_name}
+                onDeleteStation={() => {}}
+                onEditStation={() => {}}
+                onViewDetails={() => {}}
+              />
+            ))}
+          </div>
         )}
       </section>
     </div>

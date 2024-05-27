@@ -34,7 +34,7 @@ const AdjacencyList = () => {
           <h3>Adjacent Stations:</h3>
           <ul className="station-list">
             {adjacencyList.map((station) => (
-              <StationItem key={station} station={{ station_english_name: station }} />
+              <StationItem key={station} stationName={ station } />
             ))}
           </ul>
         </div>

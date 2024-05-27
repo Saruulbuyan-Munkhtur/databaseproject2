@@ -28,6 +28,18 @@ exports.getLineStationById = async (lineName, stationName) => {
   }
 };
 
+exports.getLineByStation = async (stationName) => {
+  try {
+    const lineStations = await Lines_Station.findAll({
+      where: { station_name: stationName }
+    });
+    return lineStations;
+  } catch (error) {
+    console.error('Error retrieving line stations from the database:', error);
+    throw new Error('Failed to retrieve line stations');
+  }
+};
+
 exports.createLineStation = async (lineStationData) => {
   try {
     const createdLineStation = await Lines_Station.create(lineStationData);

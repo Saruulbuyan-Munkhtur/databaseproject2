@@ -42,7 +42,7 @@ const ShortestPath = () => {
           <div className="path-container">
             {shortestPath.map((station, index) => (
               <React.Fragment key={station}>
-                <StationItem station={{ station_english_name: station }} />
+                <StationItem stationName={station} />
                 {index < shortestPath.length - 1 && (
                   <div className="arrow">&#8594;</div>
                 )}
