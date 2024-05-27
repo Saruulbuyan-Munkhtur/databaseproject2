@@ -33,7 +33,7 @@ exports.getAllRidesP = async () => {
   }
 };
 
-exports.registerRideUsingCard = async (ID, StartStation, StartTime, startLine, endLine) => {
+exports.registerRideUsingCard = async (ID, StartStation, StartTime) => {
     try {
       console.log(ID);
       const maxRideId = await getID();
@@ -49,7 +49,7 @@ exports.registerRideUsingCard = async (ID, StartStation, StartTime, startLine, e
         status: 'ONGOING'
       });
       console.log('Ride registered successfully:', newRide.toJSON());
-      await exitRide(ID, endStation, endTime, startLine, endLine);
+      await exitRide(ID, endStation, endTime);
 
     } catch (error) {
       console.error('Error inserting data:', error);
@@ -57,7 +57,7 @@ exports.registerRideUsingCard = async (ID, StartStation, StartTime, startLine, e
   };
 
 //exit ride
-exports.exitRideUsingCard = async (id, ID, endStation, startLine, endTime, endLine) => {
+exports.exitRideUsingCard = async (id, ID, endStation, endTime) => {
   try {
     const exitRide = await CardID_Rides.findOne({
       where: { ride_id: id,
@@ -66,8 +66,7 @@ exports.exitRideUsingCard = async (id, ID, endStation, startLine, endTime, endLi
     
     const start = await getChineseName(exitRide.start_station);
     const end = await getChineseName(endStation);
-    console.log(startLine);
-    const JourneyPrice = await getPrice(start, end, startLine, endLine);
+    const JourneyPrice = await getPrice(start, end);
     await exitRide.update({end_station: endStation, end_time: endTime, price: JourneyPrice, status: 'EXPIRED'});
     console.log('Exit Ride:', exitRide.toJSON());
   } catch (error) {
@@ -91,7 +90,7 @@ exports.registerRideUsingPassenger = async (ID, StartStation, StartTime) => {
       returning: false,
     });
     console.log('Ride registered successfully:', newRide.toJSON());
-    await exitRide(ID, endStation, endTime, startLine, endLine);
+    await exitRide(ID, endStation, endTime);
   } catch (error) {
     console.error('Error inserting data:', error);
   }

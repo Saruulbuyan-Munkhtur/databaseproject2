@@ -16,16 +16,6 @@ const Price = sequelize.define('price', {
     type: DataTypes.DOUBLE,
     allowNull: false,
   },
-  start_station_line: {
-    type: DataTypes.STRING,
-    primaryKey: true,
-    allowNull: false,
-  },
-  end_station_line: {
-    type: DataTypes.STRING,
-    primaryKey: true,
-    allowNull: false,
-  },
 }, {
   timestamps: false, // Disables createdAt and updatedAt
   tableName: 'price',
