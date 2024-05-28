@@ -24,6 +24,7 @@ app.use('/register-ride-using-passenger', rideRoutes);
 app.use('/graph', graphRoutes);
 app.use('/exit-using-passenger', rideRoutes)
 app.use('/nth-param-search', rideRoutes)
+app.use('/find-nth-position', linesRoutes)
 
 // Sync database and start the server
 sequelize.sync()

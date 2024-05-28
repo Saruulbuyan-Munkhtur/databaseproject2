@@ -1,5 +1,7 @@
 const Lines = require('../models/lines');
 const Lines_Station = require('../models/lines_station');
+const Station = require('../models/stations');
+const { Op } = require('sequelize');
 
 exports.getAllLines = async () => {
   try {
@@ -78,5 +80,45 @@ exports.deleteLine = async (line_name) => {
     return true;
   } catch (error) {
     console.error('Error updating line:', error);
+  }
+};
+
+exports.findNthStation = async (lineName, stationName, n) => {
+  try {
+    const station = await Station.findOne({
+      where: { station_english_name: stationName },
+  });
+
+  if (!station) {
+      console.log(`Station with name "${stationName}" not found.`);
+      return;
+  }
+
+  const checkStation = await Lines_Station.findOne({
+    where: {
+        line_name: lineName,
+        station_name: stationName,
+    }
+});
+let x = checkStation.position + n;
+let y = checkStation.position - n;
+
+const nthStations = await Lines_Station.findAll({
+  where: {
+    line_name: lineName,
+    position: {
+      [Op.or]: [x, y]
+    }
+  }
+});
+
+for(const n of nthStations){
+  console.log(n.station_name);
+}
+
+  return nthStations;
+
+  } catch (error) {
+      console.error('Error updating positions after insertion:', error);
   }
 };

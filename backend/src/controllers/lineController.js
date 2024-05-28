@@ -62,3 +62,19 @@ exports.deleteLine = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+exports.findNthStation = async (req, res) => {
+  try {
+    const { lineName, stationNameInput, position } = req.body;
+    console.log(stationNameInput);
+    console.log(position);
+    const stations = await linesService.findNthStation(lineName, stationNameInput, position);
+    if (stations) {
+      res.json(stations);
+    } else {
+      res.status(404).json({ error: 'Station not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};

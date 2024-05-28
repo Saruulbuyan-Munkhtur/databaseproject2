@@ -4,6 +4,7 @@ const linesController = require('../controllers/lineController');
 
 router.get('/', linesController.getAllLines);
 router.get('/:lineName', linesController.getLineByName);
+router.post('/find-nth-position', linesController.findNthStation)
 router.post('/', linesController.createLine);
 router.put('/:lineName', linesController.updateLine);
 router.delete('/:lineName', linesController.deleteLine);
