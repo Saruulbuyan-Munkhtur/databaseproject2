@@ -4,6 +4,7 @@ import { getLine } from '../../services/line_stationService';
 import { getLineById, deleteline, updateline } from '../../services/lineService';
 import EditLineForm from './editLineForm';
 import './lines.css';
+import { findNthStation } from '../../services/lineService'
 
 const LineDetail = ({onDelete}) => {
   const location = useLocation();
@@ -13,6 +14,18 @@ const LineDetail = ({onDelete}) => {
   const [lineDetails, setLineDetails] = useState(null);
   const [showIntro, setShowIntro] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [stationNameInput, setStationNameInput] = useState('');
+  const [positionInput, setPositionInput] = useState('');
+  const [error, setError] = useState('');
+  const [nthStations, setNthStations] = useState([]);
+
+  const handleStationNameInputChange = (event) => {
+    setStationNameInput(event.target.value);
+  };
+
+  const handlePositionInputChange = (event) => {
+    setPositionInput(event.target.value);
+  };
 
   useEffect(() => {
     const fetchStations = async () => {
@@ -66,6 +79,22 @@ const LineDetail = ({onDelete}) => {
 	setIsEditing(false);
       };
 
+      const handleFindSubmit = async (event) => {
+        event.preventDefault();
+        try {
+          const position = parseInt(positionInput);
+          if (!isNaN(position) && position >= 1 && position <= sortedStations.length) {
+            const nthStations = await findNthStation(lineName, stationNameInput, position);
+            setNthStations(nthStations);
+          } else {
+            setError('Please enter a valid position between 1 and the total number of stations.');
+          }
+        } catch (error) {
+          console.error('Error finding station by name and position:', error);
+          setError('Failed to find station. Please try again.');
+        }
+      };
+
   return (
 	<div className="line-detail">
       <h2>Line: {lineName}</h2>
@@ -75,6 +104,45 @@ const LineDetail = ({onDelete}) => {
 	  <button className="edit-button" onClick={handleEditClick}>
             Edit Line
           </button>
+          <form onSubmit={handleFindSubmit}>
+        <label htmlFor="stationNameInput">Station Name:</label>
+        <input
+          type="text"
+          id="stationNameInput"
+          name="stationNameInput"
+          value={stationNameInput}
+          placeholder='Station Name'
+          onChange={handleStationNameInputChange}
+          required
+        />
+        <label htmlFor="positionInput">Position:</label>
+        <input
+          type="number"
+          id="positionInput"
+          name="positionInput"
+          value={positionInput}
+          onChange={handlePositionInputChange}
+          placeholder='Position Ahead and Behind'
+          required
+        />
+        <button type="submit" className="find-nth-button">
+          Find Station
+        </button>
+      </form>
+      {nthStations.length > 0 && (
+      <div>
+        <h3>Found Stations:</h3>
+        <div className="station-list">
+          {nthStations.map((station) => (
+            <div key={station.station_name} className="station-item">
+              <h4>{station.station_name}</h4>
+              <p>Position: {station.position}</p>
+              <p className={`status ${station.status.toLowerCase()}`}>Status: {station.status}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
 	  {isEditing && (
         <div className="edit-line-popup">
           <div className="edit-line-popup-content">

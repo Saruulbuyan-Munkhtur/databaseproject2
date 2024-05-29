@@ -14,6 +14,7 @@ exports.getAllRides = async (req, res) => {
 exports.getAllRidesP = async (req, res) => {
   try {
     const userRides = await rideService.getAllRidesP();
+    console.log(userRides);
     res.json(userRides);
   } catch (error) {
     console.error('Error fetching rides:', error);
@@ -34,9 +35,10 @@ exports.registerRideUsingCard = async (req, res) => {
 
 exports.exitRideUsingCard = async (req, res) => {
   try{
-      const {id} = req.params;
+      const {ride_id} = req.params;
+      console.log(ride_id);
       const {ID, EndStation, EndTime} = req.body;
-      const newRide = await rideService.exitRideUsingCard(id, ID, EndStation, EndTime);
+      const newRide = await rideService.exitRideUsingCard(ride_id, ID, EndStation, EndTime);
       res.json(newRide);
   } catch (error) {
       console.error('Error making ride:', error);
@@ -81,4 +83,16 @@ exports.nthParamSearch = async (req, res) => {
       console.error('Error making ride:', error);
       res.status(500).send('Failed to make ride');
     }
+}
+
+exports.reloadCard = async (req, res) => {
+  try{
+    const {Code} = req.params;
+    const {amount} = req.body;
+    const topup = await rideService.reloadCard(Code, amount);
+    res.json(topup) 
+  } catch (error) {
+    console.error('Error Toping up:', error);
+    res.status(500).send('Failed to make ride');
+  }
 }

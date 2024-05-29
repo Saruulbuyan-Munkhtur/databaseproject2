@@ -49,3 +49,16 @@ export const deleteline = async (id) => {
   }
 };
 
+
+export const findNthStation = async (lineName, stationNameInput, position) => {
+  try {
+    console.log(lineName);
+    console.log(stationNameInput);
+    console.log(position);
+    const response = await api.post(`/line/find-nth-position`, {lineName, stationNameInput, position});
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to get stations');
+  }
+};
+

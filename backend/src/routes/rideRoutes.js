@@ -9,6 +9,7 @@ router.post('/register-ride-using-card', rideController.registerRideUsingCard);
 router.post('/register-ride-using-passenger', rideController.registerRideUsingPassenger);
 router.put('/exit-using-card/:ride_id', rideController.exitRideUsingCard);
 router.put('/exit-using-passenger/:ride_id', rideController.exitRideUsingPassenger);
+router.put('/reload-card/:Code', rideController.reloadCard);
 
 
 module.exports = router;

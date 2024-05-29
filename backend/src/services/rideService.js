@@ -2,6 +2,7 @@ const CardID_Rides = require('../models/cardid_rides');
 const UserID_Rides = require('../models/userid_rides');
 const Station = require('../models/stations.js');
 const Cards = require('../models/cards.js');
+const Passengers = require('../models/passengers.js');
 const Price = require('../models/price.js');
 const Sequelize = require('sequelize');
 const { Op } = require('sequelize');
@@ -16,7 +17,16 @@ exports.getAllRides = async () => {
     const cardRides = await CardID_Rides.findAll({
         where: {status: 'ONGOING'},
     });
-    return cardRides;
+    const rideDetails = [];
+
+    for (const u of cardRides) {
+      console.log(u);
+      let query1 = `SELECT * FROM cardid_rides u JOIN cards c ON u.user_code = c.code WHERE u.user_code = ${u.user_code} AND status = 'ONGOING'`;
+      const result = await sequelize.query(query1);
+      rideDetails.push(result);
+    }
+
+    return rideDetails;
   } catch (error) {
     throw new Error('Failed to fetch rides');
   }
@@ -25,17 +35,35 @@ exports.getAllRides = async () => {
 exports.getAllRidesP = async () => {
   try {
     const userRides = await UserID_Rides.findAll({
-        where: {status: 'ONGOING'},
+      where: { status: 'ONGOING' },
     });
-    return userRides;
+
+    const rideDetails = [];
+
+    for (const u of userRides) {
+      let query1 = `SELECT * FROM userid_rides u JOIN passengers p ON u.user_id = p.id_number WHERE u.user_id = ${u.user_id} AND status = 'ONGOING'`;
+      const result = await sequelize.query(query1);
+      rideDetails.push(result);
+    }
+
+    return rideDetails;
   } catch (error) {
     throw new Error('Failed to fetch rides');
   }
 };
 
+
+
 exports.registerRideUsingCard = async (ID, StartStation, StartTime) => {
     try {
-      console.log(ID);
+      const user = Cards.findOne({
+        where: {code: ID},
+      })
+
+      if(user.money < 13){
+        return '';
+      } else{
+        console.log(ID);
       const maxRideId = await getID();
       const newRideId = maxRideId + 1;
       const newRide = await CardID_Rides.create({
@@ -49,7 +77,8 @@ exports.registerRideUsingCard = async (ID, StartStation, StartTime) => {
         status: 'ONGOING'
       });
       console.log('Ride registered successfully:', newRide.toJSON());
-      await exitRide(ID, endStation, endTime);
+      return 'Success';
+      }
 
     } catch (error) {
       console.error('Error inserting data:', error);
@@ -63,11 +92,18 @@ exports.exitRideUsingCard = async (id, ID, endStation, endTime) => {
       where: { ride_id: id,
            },
     });
+
+    const card = await Cards.findOne({
+      where: {
+        code: ID,
+      }
+    })
     
     const start = await getChineseName(exitRide.start_station);
     const end = await getChineseName(endStation);
     const JourneyPrice = await getPrice(start, end);
     await exitRide.update({end_station: endStation, end_time: endTime, price: JourneyPrice, status: 'EXPIRED'});
+    await card.update({money: card.money - JourneyPrice});
     console.log('Exit Ride:', exitRide.toJSON());
   } catch (error) {
     console.error('Error inserting data:', error);
@@ -90,7 +126,6 @@ exports.registerRideUsingPassenger = async (ID, StartStation, StartTime) => {
       returning: false,
     });
     console.log('Ride registered successfully:', newRide.toJSON());
-    await exitRide(ID, endStation, endTime);
   } catch (error) {
     console.error('Error inserting data:', error);
   }
@@ -117,17 +152,13 @@ const getChineseName = async (stationName) => {
       const station = await Station.findOne({
         where: { station_english_name: stationName },
       });
-  
-      // Check if station exists and return its Chinese name
       if (station) {
         return station.chinese_name;
       } else {
-        // Handle the case where the station is not found
         console.log(`Station with English name '${stationName}' not found.`);
-        return null; // or throw an error if desired
+        return null;
       }
     } catch (error) {
-      // Handle errors
       console.error('Error fetching data:', error);
       throw error;
     }
@@ -141,16 +172,13 @@ const getChineseName = async (stationName) => {
       },
       });
   
-      // Check if station exists and return its Chinese name
       if (Journey) {
         return Journey.price;
       } else {
-        // Handle the case where the station is not found
         console.log(`Journey not found.`);
-        return null; // or throw an error if desired
+        return null;
       }
     } catch (error) {
-      // Handle errors
       console.error('Error fetching data:', error);
       throw error;
     }
@@ -158,28 +186,28 @@ const getChineseName = async (stationName) => {
 
   const getID = async () => {
     try {
-      const sql = 'SELECT max(ride_id) as max_ride_id FROM cardid_rides'; // Alias the max(ride_id) column
+      const sql = 'SELECT max(ride_id) as max_ride_id FROM cardid_rides'; 
       const [results] = await sequelize.query(sql);
-      console.log('Query results:', results); // Log query results
-      const maxRideId = parseInt(results[0].max_ride_id) || 0; // Access the result using the alias
-      console.log('Max ride ID:', maxRideId); // Log parsed max ride ID
+      console.log('Query results:', results);
+      const maxRideId = parseInt(results[0].max_ride_id) || 0;
+      console.log('Max ride ID:', maxRideId); 
       return maxRideId;
     } catch (error) {
-      console.error('Error fetching max ride ID:', error); // Log any errors
+      console.error('Error fetching max ride ID:', error); 
       throw error;
     }
   }
 
   const getIDP = async () => {
     try {
-      const sql = 'SELECT max(ride_id) as max_ride_id FROM userid_rides'; // Alias the max(ride_id) column
+      const sql = 'SELECT max(ride_id) as max_ride_id FROM userid_rides'; 
       const [results] = await sequelize.query(sql);
-      console.log('Query results:', results); // Log query results
-      const maxRideId = parseInt(results[0].max_ride_id) || 0; // Access the result using the alias
-      console.log('Max ride ID:', maxRideId); // Log parsed max ride ID
+      console.log('Query results:', results); 
+      const maxRideId = parseInt(results[0].max_ride_id) || 0; 
+      console.log('Max ride ID:', maxRideId); 
       return maxRideId;
     } catch (error) {
-      console.error('Error fetching max ride ID:', error); // Log any errors
+      console.error('Error fetching max ride ID:', error); 
       throw error;
     }
   }
@@ -239,3 +267,25 @@ const getChineseName = async (stationName) => {
     console.log(result2);
     return { result1, result2 };
 }
+
+exports.reloadCard = async (Code, amount) => {
+  try {
+    const card = await Cards.findOne({
+      where: { code: Code }
+    });
+
+    if (!card) {
+      console.error('Card not found');
+      return;
+    }
+
+    const updatedCard = await Cards.update(
+      { money: Sequelize.literal(`money + ${amount}`) },
+      { where: { code: Code }, returning: true }
+    );
+
+    console.log('Money will arrive soon');
+  } catch (err) {
+    console.error('Error updating card:', err);
+  }
+};

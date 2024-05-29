@@ -6,6 +6,7 @@ import { getAllRides } from '../services/rideService';
 import { getAllRidesP } from '../services/rideService';
 import RegisterRideButton from '../components/rides/registerButton';
 import RegisterRideButtonPassenger from '../components/rides/registerPassengerButton';
+import TopupButton from '../components/rides/TopupButton.js';
 import '../components/rides/rides.css';
 const RidesPage = () => {
   const [searchParams, setSearchParams] = useState({});
@@ -14,6 +15,7 @@ const RidesPage = () => {
   const [ridesP, setRidesPassenger] = useState([]);
   const [selectedComponent, setSelectedComponent] = useState('search');
   const displayedSearch = searchParams;
+
 
   const renderComponent = () => {
     switch (selectedComponent) {
@@ -54,6 +56,7 @@ const RidesPage = () => {
           <div className='register-buttons'>
                 <RegisterRideButton />
                 <RegisterRideButtonPassenger />
+                <TopupButton />
               </div>
           <Rides rides={rides} ridesP={ridesP} searchParams={searchParams} />;
           </div>)
@@ -85,6 +88,7 @@ const RidesPage = () => {
   const fetchRidesPassenger = async () => {
     try {
       const data = await getAllRidesP();
+      console.log(data);
       setRidesPassenger(data);
     } catch (error) {
       console.error('Error fetching rides:', error);
