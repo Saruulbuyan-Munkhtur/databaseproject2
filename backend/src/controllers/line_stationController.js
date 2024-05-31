@@ -77,7 +77,7 @@ exports.updateLineStation = async (req, res) => {
 
 exports.deleteLineStation = async (req, res) => {
   try {
-    const { lineName, stationName } = req.params;
+    const { lineName, stationName } = req.body;
     await lineStationService.deleteLineStation(lineName, stationName);
     res.sendStatus(204);
   } catch (error) {

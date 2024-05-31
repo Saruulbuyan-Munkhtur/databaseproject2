@@ -78,3 +78,14 @@ exports.findNthStation = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+exports.deleteLineStation = async (req, res) => {
+  try {
+    const { lineName, stationName } = req.body;
+    await linesService.deleteLineStation(lineName, stationName);
+    res.sendStatus(204);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete line station' });
+  }
+};
+

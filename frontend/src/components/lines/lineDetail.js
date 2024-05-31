@@ -5,6 +5,7 @@ import { getLineById, deleteline, updateline } from '../../services/lineService'
 import EditLineForm from './editLineForm';
 import './lines.css';
 import { findNthStation } from '../../services/lineService'
+import DeleteFromLineButton from './deleteFromLineButton';
 
 const LineDetail = ({onDelete}) => {
   const location = useLocation();
@@ -203,6 +204,7 @@ const LineDetail = ({onDelete}) => {
             <h4>{station.station_name}</h4>
             <p>Position: {station.position}</p>
             <p className={`status ${station.status.toLowerCase()}`}>Status: {station.status}</p>
+            <DeleteFromLineButton onClick = {useEffect} lineName = {lineName} stationName = {station.station_name}/>
           </div>
         ))}
       </div>

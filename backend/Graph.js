@@ -85,25 +85,22 @@ class Node {
   async function shortestPath(startNodeName, endNodeName) {
     try {
         const graph = await buildGraph(Lines_Station);
-        // Check if start and end nodes exist in the graph
         if (!graph.has(startNodeName) || !graph.has(endNodeName)) {
             throw new Error("Start or end node not found in the graph");
         }
 
-        const distances = new Map(); // Map to store distances from the start node
-        const previousNodes = new Map(); // Map to store previous nodes in the shortest path
-        const queue = new Set(); // Set to store nodes to be visited
+        const distances = new Map(); 
+        const previousNodes = new Map(); 
+        const queue = new Set(); 
 
-        // Initialize distances and previousNodes
         for (const node of graph.values()) {
             distances.set(node.name, Infinity);
             previousNodes.set(node.name, null);
             queue.add(node.name);
         }
-        distances.set(startNodeName, 0); // Distance from start node to itself is 0
+        distances.set(startNodeName, 0);
 
         while (queue.size > 0) {
-            // Find the node in the queue with the smallest distance
             let minDistanceNode = null;
             for (const node of queue) {
                 if (!minDistanceNode || distances.get(node) < distances.get(minDistanceNode)) {
@@ -113,16 +110,14 @@ class Node {
 
             queue.delete(minDistanceNode);
 
-            // Exit if the minimum distance node is the end node
             if (minDistanceNode === endNodeName) {
                 break;
             }
 
-            // Update distances and previousNodes for neighboring nodes
             const currentNode = graph.get(minDistanceNode);
             for (const neighborId of currentNode.adj.keys()) {
                 const neighborNode = graph.get(neighborId);
-                const distanceToNeighbor = distances.get(minDistanceNode) + 1; // Assuming all edges have weight 1
+                const distanceToNeighbor = distances.get(minDistanceNode) + 1;
                 if (distanceToNeighbor < distances.get(neighborNode.name)) {
                     distances.set(neighborNode.name, distanceToNeighbor);
                     previousNodes.set(neighborNode.name, minDistanceNode);
@@ -130,7 +125,6 @@ class Node {
             }
         }
 
-        // Reconstruct the shortest path from startNodeName to endNodeName
         const shortestPath = [];
         let currentNode = endNodeName;
         while (currentNode !== null) {
@@ -147,7 +141,6 @@ class Node {
 
     const modifyStatus = async (station_name, updatedStatus) => {
         try {
-            // Find the stations by their English name
             const stations = await Lines_Station.findAll({
                 where: { station_name: station_name },
             });
@@ -157,7 +150,6 @@ class Node {
                 return;
             }
     
-            // Update each station with the new details
             for (const station of stations) {
                 await station.update({status: updatedStatus});
                 console.log('Status modified successfully:', station.toJSON());

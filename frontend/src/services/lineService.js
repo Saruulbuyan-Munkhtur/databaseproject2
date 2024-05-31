@@ -62,3 +62,12 @@ export const findNthStation = async (lineName, stationNameInput, position) => {
   }
 };
 
+export const deleteLineStation = async (lineName, stationName) => {
+  try {
+    const response = await api.post(`/line/delete-from-station`, {lineName, stationName});
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to delete line station');
+  }
+};
+

@@ -49,9 +49,9 @@ export const updateLineStation = async (id, lineStationData) => {
   }
 };
 
-export const deleteLineStation = async (id) => {
+export const deleteLineStation = async (lineName, stationName) => {
   try {
-    const response = await api.delete(`/line_stations/${id}`);
+    const response = await api.post(`/line_stations/delete-from-station`, lineName, stationName);
     return response.data;
   } catch (error) {
     throw new Error('Failed to delete line station');

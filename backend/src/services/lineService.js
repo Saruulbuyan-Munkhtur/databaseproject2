@@ -122,3 +122,11 @@ for(const n of nthStations){
       console.error('Error updating positions after insertion:', error);
   }
 };
+
+exports.deleteLineStation = async (lineName, stationName) => {
+  try {
+    await Lines_Station.destroy({ where: { line_name: lineName, station_name: stationName } });
+  } catch (error) {
+    throw new Error('Failed to delete line station');
+  }
+};
