@@ -2,6 +2,7 @@ const Lines = require('../models/lines');
 const Lines_Station = require('../models/lines_station');
 const Station = require('../models/stations');
 const { Op } = require('sequelize');
+const {Sequelize} = require('sequelize');
 
 exports.getAllLines = async () => {
   try {
@@ -125,8 +126,32 @@ for(const n of nthStations){
 
 exports.deleteLineStation = async (lineName, stationName) => {
   try {
+    const stationToDestroy = await Lines_Station.findOne({
+      where: { line_name: lineName, station_name: stationName }
+    });
+
+    if (!stationToDestroy) {
+      throw new Error('Station to delete not found');
+    }
+
+    const stationsToUpdate = await Lines_Station.findAll({
+      where: {
+        line_name: lineName,
+        position: { [Sequelize.Op.gt]: stationToDestroy.position }
+      }
+    });
+
+    for (const stationToUpdate of stationsToUpdate) {
+      await stationToUpdate.update({ position: stationToUpdate.position - 1 });
+    }
+
     await Lines_Station.destroy({ where: { line_name: lineName, station_name: stationName } });
+
+    return { message: 'Station deleted successfully' };
   } catch (error) {
-    throw new Error('Failed to delete line station');
+    console.error('Failed to delete line station:', error.message);
+    throw new Error('Failed to delete line station: ' + error.message);
   }
 };
+
+

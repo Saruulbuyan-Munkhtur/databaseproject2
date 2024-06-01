@@ -45,14 +45,24 @@ async function getStationById(stationId) {
 
 async function updateStation(lineName, station_english_name, district, intro, chinese_name, position, status) {
   try {
-    const station = await Station.findByPk(station_english_name);
+    const station = await Station.findOne({
+      where: {station_english_name: station_english_name}});
 
     if (!station) {
       console.log('Station not found with ID:', station_english_name);
       return null;
     }
 
-    const updatedStation = await station.update(station_english_name, district, intro, chinese_name);
+    const updatedStation = await Station.update({
+      lineName,
+      district,
+      intro,
+      chinese_name,
+      position,
+      status
+    }, {
+      where: { station_english_name: station_english_name }
+    });   
     console.log('Updated station:', updatedStation);
     modifyPosition(lineName, station_english_name, position);
     modifyStationStatus(lineName, station_english_name, status);

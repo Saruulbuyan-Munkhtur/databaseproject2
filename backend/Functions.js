@@ -564,7 +564,7 @@ const modifyPosition = async (lineName, stationName, position) => {
           order: [['position', 'ASC']]
       });
 
-      y = position + 1;
+      y++;
       for (const updatedStation of updatedStations) {
           await updatedStation.update({ position: y });
           y++;
@@ -628,10 +628,17 @@ const getBusesAtStations = async (station1, station2) => {
 };
 
 const modifyStationStatus = async (lineName, stationName, newStatus) => {
-  const station = Lines_Station.findOne({
+  console.log(stationName)
+  console.log(lineName)
+  const station = await Lines_Station.findOne({
     where: {line_name: lineName,
     station_name: stationName,}
   })
+  console.log(station.station_name);
+  if (!station) {
+    console.log('Station not found:', stationName);
+    return null; // or throw an error if required
+  }
 
   await station.update({status: newStatus});
 }

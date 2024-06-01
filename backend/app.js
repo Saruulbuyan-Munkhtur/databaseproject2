@@ -26,7 +26,6 @@ app.use('/exit-using-passenger', rideRoutes)
 app.use('/exit-using-card', rideRoutes)
 app.use('/nth-param-search', rideRoutes)
 app.use('/find-nth-position', linesRoutes)
-app.use('/delete-from-station', line_stationRoutes);
 
 // Sync database and start the server
 sequelize.sync()

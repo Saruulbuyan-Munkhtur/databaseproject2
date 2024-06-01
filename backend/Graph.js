@@ -131,10 +131,9 @@ class Node {
             shortestPath.unshift(currentNode);
             currentNode = previousNodes.get(currentNode);
         }
-
         return shortestPath;
     } catch (error) {
-        throw new Error("Error fetching data:", error);
+        throw new Error(`Error fetching data for '${startNodeName}' and '${endNodeName}':`, error);
     }
 }
 
@@ -198,7 +197,6 @@ class Node {
     .catch((err) => {
         console.error(err);
     });
-
 
 module.exports = {printAdjacencyList, modifyStatus, shortestPath, buildGraph, getAdjacencyList};
     

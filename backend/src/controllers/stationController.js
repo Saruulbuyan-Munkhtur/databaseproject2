@@ -52,9 +52,9 @@ exports.getStationById = async (req, res) => {
 exports.updateStation = async (req, res) => {
   try {
     const { id } = req.params;
-    const { district, intro, chinese_name } = req.body;
+    const {lineName, station_english_name, district, intro, chinese_name, position, status } = req.body;
 
-    const updatedStation = await stationService.updateStation(id, { district, intro, chinese_name });
+    const updatedStation = await stationService.updateStation(lineName, id, district, intro, chinese_name, position, status);
 
     if (!updatedStation) {
       return res.status(404).json({ error: 'Station not found' });

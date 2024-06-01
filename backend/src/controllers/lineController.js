@@ -81,9 +81,11 @@ exports.findNthStation = async (req, res) => {
 
 exports.deleteLineStation = async (req, res) => {
   try {
-    const { lineName, stationName } = req.body;
-    await linesService.deleteLineStation(lineName, stationName);
-    res.sendStatus(204);
+    const { lineName, stationName } = req.query;
+    console.log(lineName);
+    console.log(stationName);
+    const deleted = await linesService.deleteLineStation(lineName, stationName);
+    res.json(deleted)
   } catch (error) {
     res.status(500).json({ error: 'Failed to delete line station' });
   }
