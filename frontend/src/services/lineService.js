@@ -64,10 +64,32 @@ export const findNthStation = async (lineName, stationNameInput, position) => {
 
 export const deleteLineStation = async (lineName, stationName) => {
   try {
-    const response = await api.post(`/line/delete-from-station`, {lineName, stationName});
+    console.log(lineName);
+    console.log(stationName);
+    const response = await api.delete(`/line/delete-from-station?stationName=${stationName}&lineName=${lineName}`);
     return response.data;
   } catch (error) {
     throw new Error('Failed to delete line station');
   }
 };
 
+
+export const verifyStation = async (lineName, stationName) => {
+  try {
+    console.log(lineName);
+    console.log(stationName)
+    const response = await api.post(`/line/verify-station`, {stationName, lineName});
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to add station');
+  }
+};
+
+export const placeStationsOnLine = async (lineName, stationNames, position, status) => {
+  try{
+    const response = await api.post(`/line/place-stations-on-line`, {lineName, stationNames, position, status});
+    return response.data
+  } catch (error) {
+    throw new Error('Failed to add stations batching style');
+  }
+}

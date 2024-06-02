@@ -91,3 +91,24 @@ exports.deleteLineStation = async (req, res) => {
   }
 };
 
+exports.verifyStation = async (req, res) => {
+  try{
+    const {lineName, stationName} = req.body;
+    console.log(lineName)
+    const eligible = await linesService.verifyStation(lineName, stationName);
+    res.json(eligible)
+  } catch (error) {
+    res.status(500).json({ error: 'Not eligible station' });
+  }
+}
+
+exports.placeStationsOnLine = async (req, res) => {
+  try{
+    const {lineName, stationNames, position, status} = req.body;
+    const stations = await linesService.placeStationsOnLine(lineName, stationNames, position, status);
+    res.json(stations)
+  } catch (error) {
+    res.status(500).json({ error: 'Unable to insert stations' });
+  }
+}
+

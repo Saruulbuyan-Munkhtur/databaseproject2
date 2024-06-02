@@ -154,4 +154,112 @@ exports.deleteLineStation = async (lineName, stationName) => {
   }
 };
 
+exports.verifyStation = async (lineName, stationName) => {
+  try{
+    console.log(lineName)
+      const station = await Station.findOne({
+        where: {station_english_name: stationName},
+      })
+
+      if(station){
+        const stations = await Lines_Station.findAll({
+          where: {station_name: stationName},
+        })
+
+        for(const s of stations){
+          if(s.line_name == lineName){
+            return false;
+          }
+        }
+      }
+      return station;
+  } catch (error){
+    throw new Error('Not Eligible');
+  }
+}
+
+
+exports.placeStationsOnLine = async (lineName, stationNames, position, status) => {
+  try {
+      // Find the line by name
+      const line = await Lines.findOne({
+          where: { line_name: lineName },
+      });
+
+      if (!line) {
+          console.log(`Line with name "${lineName}" not found.`);
+          return;
+      }
+
+      // Loop through each station name
+      let currentPosition = position; // Initialize currentPosition to the specified position
+      let x = 0;
+
+      for (const stationName of stationNames) {
+        // Check if station exists
+        const station = await Station.findOne({
+            where: { station_english_name: stationName },
+        });
+
+        if (!station) {
+            console.log(`Station with name "${stationName}" not found.`);
+            // Handle this situation according to your requirements (e.g., skip this station)
+            continue;
+        }
+        x++;
+    }
+    await updatePositionsAfterInsertion(lineName, position, x, status);
+
+      for (const stationName of stationNames) {
+          // Check if station exists
+          const station = await Station.findOne({
+              where: { station_english_name: stationName },
+          });
+
+          if (!station) {
+              console.log(`Station with name "${stationName}" not found.`);
+              // Handle this situation according to your requirements (e.g., skip this station)
+              continue;
+          }
+          x++;
+          // Create association between line and station at specified position
+          await Lines_Station.create({
+              line_name: lineName,
+              station_name: stationName,
+              position: currentPosition,
+              status: status
+          });
+
+          console.log(`Station "${stationName}" placed on line "${lineName}" at position ${currentPosition}.`);
+
+          // Increment currentPosition for the next station
+          currentPosition++;
+      }
+  } catch (error) {
+      console.error('Error placing stations on line:', error);
+  }
+};
+
+const updatePositionsAfterInsertion = async (lineName, lastInsertedPosition, x) => {
+try {
+    // Find stations on the same line with positions greater than or equal to lastInsertedPosition
+    const stationsToUpdate = await Lines_Station.findAll({
+        where: {
+            line_name: lineName,
+            position: { [Sequelize.Op.gte]: lastInsertedPosition }
+        }
+    });
+
+    for (const stationToUpdate of stationsToUpdate) {
+        await stationToUpdate.update({ position: stationToUpdate.position + x });
+    }
+
+    console.log(`Positions updated for stations with position greater than or equal to ${lastInsertedPosition} by ${x}.`);
+
+} catch (error) {
+    console.error('Error updating positions after insertion:', error);
+}
+};
+
+
 
