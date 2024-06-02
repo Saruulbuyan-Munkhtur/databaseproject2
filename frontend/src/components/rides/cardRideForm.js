@@ -5,10 +5,10 @@ import { registerRideUsingCard } from '../../services/rideService';
 const RegisterRideForm = ({ onClose }) => {
   const [ID, setID] = useState('');
   const [startStation, setStartStation] = useState('');
-  const [startTime, setStartTime] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const startTime = new Date().toISOString();
     try {
       const ride = await registerRideUsingCard(ID,startStation,startTime);
       console.log(ride);
@@ -43,15 +43,6 @@ const RegisterRideForm = ({ onClose }) => {
             id="startStation"
             value={startStation}
             onChange={(e) => setStartStation(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="startTime">Start Time:</label>
-          <input
-            type="text"
-            id="startTime"
-            value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
           />
         </div>
         <button type="submit">Register Ride</button>

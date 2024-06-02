@@ -6,10 +6,10 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 const ExitRideFormP = ({ onClose, rideId}) => {
   const [endStation, setEndStation] = useState('');
-  const [endTime, setEndTime] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const endTime = new Date().toISOString();
     try {
       await exitRideUsingPassenger(rideId, endStation, endTime);
       alert('Ride exited successfully');
@@ -32,15 +32,6 @@ const ExitRideFormP = ({ onClose, rideId}) => {
             onChange={(e) => setEndStation(e.target.value)}
           />
         </div>
-        <div>
-        <label htmlFor="endTime">End Time:</label>
-        <input
-            type="text"
-            id="endTime"
-            value={endTime}
-            onChange={(e) => setEndTime(e.target.value)}
-          />
-        </div>=
         <button type="submit">Exit Ride</button>
         <button type="button" onClick={onClose}>Cancel</button>
       </form>

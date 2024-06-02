@@ -97,7 +97,6 @@ const RidesPage = () => {
 
 
   const handleCodeSearch = () => {
-    // Implement search by code logic here if needed
   };
 
   return (
