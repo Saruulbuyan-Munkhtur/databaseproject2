@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import './home.css';
 import { getStations } from '../../services/stationService';
+import { getPeakHours, getStationPopularity } from '../../services/viewService';
 import StationItem from '../stations/stationItem';
+import PeakHours from '../views/peakHours';
+import StationPopularity from '../views/stationPopularity';
 
 const Home = () => {
   const [stations, setStations] = useState([]);
+  const [peakHoursData, setPeakHoursData] = useState([]);
+  const [stationPopularityData, setStationPopularityData] = useState([]);
+
 
   useEffect(() => {
     const fetchStations = async () => {
@@ -17,7 +23,28 @@ const Home = () => {
       }
     };
 
+    const fetchPeakHours = async () => {
+      try {
+        const data = await getPeakHours();
+        console.log(data);
+        setPeakHoursData(data);
+      } catch (error) {
+        console.error('Error fetching peak hours:', error);
+      }
+    };
+    const fetchStationPopularity = async () => {
+      try {
+        const data = await getStationPopularity();
+        console.log(data);
+        setStationPopularityData(data);
+      } catch (error) {
+        console.error('Error fetching station popularity:', error);
+      }
+    };
+
     fetchStations();
+    fetchPeakHours();
+    fetchStationPopularity();
   }, []);
 
   return (
@@ -28,7 +55,7 @@ const Home = () => {
         <a href="/lines" className="cta-button">Explore Lines</a>
       </section>
 
-      <section className="featured-stations">
+      {/* <section className="featured-stations">
         <h2>Featured Stations</h2>
         {stations.length === 0 ? (
           <p>Loading stations...</p>
@@ -44,6 +71,23 @@ const Home = () => {
               />
             ))}
           </div>
+        )}
+      </section> */}
+
+      <section className="peak-hours">
+        <h2>Peak Hours</h2>
+        {peakHoursData.length === 0 ? (
+          <p>Loading peak hours...</p>
+        ) : (
+          <PeakHours data={peakHoursData} />
+        )}
+      </section>
+      <section className="station-popularity">
+        <h2>Station Popularity</h2>
+        {stationPopularityData.length === 0 ? (
+          <p>Loading peak hours...</p>
+        ) : (
+          <StationPopularity data={stationPopularityData} />
         )}
       </section>
     </div>
