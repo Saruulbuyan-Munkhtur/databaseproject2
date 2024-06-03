@@ -4,6 +4,7 @@ const graphController = require('../controllers/graphController');
 
 router.get('/shortest-path', graphController.getShortestPath);
 router.get('/adjacency-list/:stationName', graphController.getAdjacencyList);
+router.get('/get-buses', graphController.getBusesAtStations);
 router.put('/update-status/:stationName', graphController.updateStationStatus);
 
 module.exports = router;

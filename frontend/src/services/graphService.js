@@ -26,3 +26,12 @@ export const updateStationStatus = async (stationName, updatedStatus) => {
     throw new Error('Failed to update station status');
   }
 };
+
+export const getBusesAtStations = async (station1, station2) => {
+  try {
+    const response = await api.get(`/graph/get-buses?station1=${station1}&station2=${station2}`);
+    return response.data
+  } catch (error) {
+    throw new Error('Failed to get buses');
+  }
+};

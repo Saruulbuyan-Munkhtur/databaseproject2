@@ -608,7 +608,7 @@ const getBusesAtStations = async (station1, station2) => {
     Station_Buses.hasMany(Station_Buses, { foreignKey: 'bus_info', as: 't2' });
 
     const query = `
-      SELECT DISTINCT t1.bus_name, t1.bus_info
+      SELECT DISTINCT t1.entrance,  t1.bus_info
       FROM station_buses AS t1
       JOIN station_buses AS t2 ON t1.bus_info = t2.bus_info
       WHERE t1.station_name = :station1 AND t2.station_name = :station2;
