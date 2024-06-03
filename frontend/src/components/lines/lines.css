@@ -355,4 +355,24 @@
 		display: flex;
 	}
 
+	.line-detail-top{
+		display: flex;
+		flex-direction: row;
+	}
+
+	.line-detail-right{
+		padding-left: 200px;
+	}
+
+	.station-list {
+		margin-top: 10px; /* Add margin to create space */
+		border: 1px solid #ccc; /* Add a border */
+		border-radius: 5px; /* Add border radius for rounded corners */
+		padding: 10px; /* Add padding for inner spacing */
+	  }
+	  
+	  .station-item {
+		margin-bottom: 5px; /* Add margin between each station item */
+	  }
+
 	  

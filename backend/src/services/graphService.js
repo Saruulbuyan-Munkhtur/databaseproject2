@@ -1,4 +1,13 @@
 const { buildGraph, shortestPath, printAdjacencyList, modifyStatus, getAdjacencyList } = require('../../Graph');
+const Station_Buses = require('../models/station_buses.js');
+const Sequelize = require('sequelize');
+
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  dialect: process.env.DB_DIALECT,
+});
+
 
 exports.getShortestPath = async (startNodeName, endNodeName) => {
   try {
@@ -23,5 +32,28 @@ exports.updateStationStatus = async (stationName, updatedStatus) => {
     await modifyStatus(stationName, updatedStatus);
   } catch (error) {
     throw new Error('Failed to update station status');
+  }
+};
+
+exports.getBusesAtStations = async (station1, station2) => {
+  try {
+
+    const query = `
+      SELECT DISTINCT t1.entrance,  t1.bus_info
+      FROM station_buses AS t1
+      JOIN station_buses AS t2 ON t1.bus_info = t2.bus_info
+      WHERE t1.station_name = :station1 AND t2.station_name = :station2;
+    `;
+
+    const buses = await sequelize.query(query, {
+      replacements: { station1, station2 },
+      type: Sequelize.QueryTypes.SELECT,
+    });
+
+    console.log('Buses:', buses);
+    return buses;
+  } catch (error) {
+    console.error('Error fetching buses:', error);
+    return null;
   }
 };

@@ -10,3 +10,51 @@
 	font-size: 20px;
 	margin: 0 10px;
       }
+
+
+	  .bus-list {
+		display: flex;
+		align-items: flex-start; /* Adjust alignment to top */
+		flex-wrap: wrap;
+		list-style: none;
+		padding: 20px;
+
+	  }
+	  
+	  
+	  .bus-info {
+		background-color: #f2f2f2;
+		padding: 8px;
+		border-radius: 4px;
+		margin-right: 10px;
+	  }
+	  
+	  .bus-entrance {
+		font-weight: bold;
+		color: #333;
+	  }
+	  
+	  .bus-path-container {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 10px;
+		margin-top: 20px;
+		padding: 10px;
+		border-radius: 4px;
+		background-color: #fff;
+	  }
+	  
+	  .bus-item {
+		display: flex;
+		align-items: center;
+		margin-bottom: 10px;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+		padding: 10px;
+		border-radius: 4px;
+		background-color: #fff;
+		flex-shrink: 0;
+		min-width: 200px;
+		margin-right: 10px;
+		margin-bottom: 10px;
+	  }

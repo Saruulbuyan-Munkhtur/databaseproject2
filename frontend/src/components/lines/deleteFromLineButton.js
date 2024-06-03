@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import './lines.css';
 import { deleteLineStation } from '../../services/lineService';
 
+
 const DeleteFromLineButton = ({lineName, stationName}) => {
 
-  const handleClick = () => {
-    const deleted = deleteLineStation(lineName, stationName);
+  const handleClick = async () => {
+    await deleteLineStation(lineName, stationName);
   }
 
   return (

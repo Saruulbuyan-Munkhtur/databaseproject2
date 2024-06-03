@@ -1,9 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { updateStation } from '../../services/stationService';
 import './stations.css';
 
 const StationEdit = ({ station, onSubmit, onClose }) => {
-  const [stationData, setStationData] = useState(station);
+  const [stationData, setStationData] = useState({
+    lineName: '',
+    station_english_name: '',
+    chinese_name: '',
+    district: '',
+    intro: '',
+    position: '',
+    status: ''
+  });
+
+  useEffect(() => {
+    if (station) {
+      setStationData({
+        lineName: station.lineName || '',
+        station_english_name: station.station_english_name || '',
+        chinese_name: station.chinese_name || '',
+        district: station.district || '',
+        intro: station.intro || '',
+        position: station.position || '',
+        status: station.status || ''
+      });
+    }
+  }, [station]);
 
   const handleChange = (e) => {
     setStationData({ ...stationData, [e.target.name]: e.target.value });
@@ -13,7 +35,7 @@ const StationEdit = ({ station, onSubmit, onClose }) => {
     e.preventDefault();
     try {
       const { lineName, station_english_name, district, intro, chinese_name, position, status } = stationData;
-      console.log('Updating station with data:', { lineName, station_english_name, district, intro, chinese_name, position, status });
+      console.log(`Updating station with data: '${station_english_name}' '${lineName}'`);
       const updatedStation = await updateStation(lineName, station_english_name, district, intro, chinese_name, position, status);
       onSubmit(updatedStation);
       onClose();

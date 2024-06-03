@@ -41,13 +41,27 @@ exports.getAllRidesP = async () => {
     const rideDetails = [];
 
     for (const u of userRides) {
-      let query1 = `SELECT * FROM userid_rides u JOIN passengers p ON u.user_id = p.id_number WHERE u.user_id = ${u.user_id} AND status = 'ONGOING'`;
-      const result = await sequelize.query(query1);
-      rideDetails.push(result);
+      console.log(u.user_id);
+
+      // Use parameterized query to avoid SQL injection
+      const query1 = `
+        SELECT u.*, p.*
+        FROM userid_rides u 
+        JOIN passengers p ON u.user_id = p.id_number 
+        WHERE u.user_id = :user_id AND u.status = 'ONGOING'
+      `;
+      const [result] = await sequelize.query(query1, {
+        replacements: { user_id: u.user_id },
+        type: sequelize.QueryTypes.SELECT
+      });
+        rideDetails.push(result);
     }
+
+    console.log('rideDetails:', JSON.stringify(rideDetails, null, 2)); // Log the output for verification
 
     return rideDetails;
   } catch (error) {
+    console.error('Error fetching rides:', error); // Log the error for debugging
     throw new Error('Failed to fetch rides');
   }
 };

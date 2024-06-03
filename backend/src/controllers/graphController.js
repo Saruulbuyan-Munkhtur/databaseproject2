@@ -30,3 +30,14 @@ exports.updateStationStatus = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.getBusesAtStations = async (req, res) => {
+  try {
+    const { station1, station2 } = req.query;
+    const path = await graphService.getBusesAtStations(station1, station2);
+    console.log(path)
+    res.json(path);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

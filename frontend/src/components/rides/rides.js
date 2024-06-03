@@ -7,6 +7,7 @@ import RegisterRideButton from './registerButton';
 const Rides = ({ rides, ridesP }) => {
   const displayedRides = rides.slice(0, 10);
   const displayedRidesP = ridesP.slice(0, 10);
+  console.log(displayedRidesP)
 
   return (
     <div className="rides-container">
@@ -45,6 +46,7 @@ const Rides = ({ rides, ridesP }) => {
         )}
       </div>
 
+      <div className="rides-container2">
       <div className="rides-list-container2">
         <h2 className="rides-header">Ongoing Passenger Rides</h2>
         <div className="rides-header2">
@@ -60,28 +62,25 @@ const Rides = ({ rides, ridesP }) => {
         </div>
         {displayedRidesP.length > 0 ? (
           <ul className="ride-list">
-            {displayedRidesP.map((ridePArray, index) => (
-              <div key={index}>
-                {ridePArray[0].map((rideP) => (
-                  <div key={rideP.user_id} className="ride-item">
-                  <p>{rideP.ride_id}</p>
-                  <p className='display-code'>{rideP.id_number}</p>
-                  <p className='display-start'>{rideP.name}</p>
-                  <p className='display-end'>{rideP.phone_number}</p>
-                  <p className='display-gender'>{rideP.gender}</p>
-                  <p className='display-district'>{rideP.district}</p>
-                  <p className='display-start-station'>{rideP.start_station}</p>
-                  <p className='display-start-time'>{rideP.start_time}</p>
-                  <p className='display-status'>{rideP.status}</p>
-                  <ExitRideUsingPassengerButton rideId={rideP.ride_id} />
-                </div>
-                ))}
+            {displayedRidesP.map((rideP, index) => (
+              <div key={rideP.user_id || index} className="ride-item">
+                <p>{rideP.ride_id}</p>
+                <p className='display-code'>{rideP.id_number}</p>
+                <p className='display-start'>{rideP.name}</p>
+                <p className='display-end'>{rideP.phone_number}</p>
+                <p className='display-gender'>{rideP.gender}</p>
+                <p className='display-district'>{rideP.district}</p>
+                <p className='display-start-station'>{rideP.start_station}</p>
+                <p className='display-start-time'>{rideP.start_time}</p>
+                <p className='display-status'>{rideP.status}</p>
+                <ExitRideUsingPassengerButton rideId={rideP.ride_id} />
               </div>
             ))}
           </ul>
         ) : (
           <p>No rides available</p>
         )}
+      </div>
       </div>
     </div>
   );
