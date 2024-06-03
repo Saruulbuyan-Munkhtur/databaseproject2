@@ -1,4 +1,4 @@
-const { buildGraph, shortestPath, printAdjacencyList, modifyStatus, getAdjacencyList } = require('../../Graph');
+const { shortestPath, printAdjacencyList, modifyStatus, getAdjacencyList, shortestPathWithBus } = require('../../Graph');
 const Station_Buses = require('../models/station_buses.js');
 const Sequelize = require('sequelize');
 
@@ -12,6 +12,16 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
 exports.getShortestPath = async (startNodeName, endNodeName) => {
   try {
     const path = await shortestPath(startNodeName, endNodeName);
+    return path;
+  } catch (error) {
+    throw new Error('Failed to find shortest path');
+  }
+};
+
+
+exports.getShortestPathWithBus = async (startNodeName, endNodeName) => {
+  try {
+    const path = await shortestPathWithBus(startNodeName, endNodeName);
     return path;
   } catch (error) {
     throw new Error('Failed to find shortest path');

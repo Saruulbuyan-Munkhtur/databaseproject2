@@ -261,10 +261,10 @@ const LineDetail = ({onDelete}) => {
           </div>
           <div className="info-row">
             <div className="info-item">
-              <strong>Start:</strong> {lineDetails.start}
+              <strong>Start:</strong> {lineDetails.start_time}
             </div>
             <div className="info-item">
-              <strong>End:</strong> {lineDetails.end}
+              <strong>End:</strong> {lineDetails.end_time}
             </div>
           </div>
           <button className="intro-button" onClick={toggleIntro}>

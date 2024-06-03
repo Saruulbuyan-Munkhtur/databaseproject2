@@ -41,3 +41,13 @@ exports.getBusesAtStations = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.getShortestPathWithBus = async (req, res) => {
+  try {
+    const { startNodeName, endNodeName } = req.query;
+    const path = await graphService.getShortestPathWithBus(startNodeName, endNodeName);
+    res.json(path);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

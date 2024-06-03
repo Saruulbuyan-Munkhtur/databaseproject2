@@ -9,6 +9,15 @@ export const getShortestPath = async (startNodeName, endNodeName) => {
   }
 };
 
+export const getShortestPathWithBus = async (startNodeName, endNodeName) => {
+  try {
+    const response = await api.get(`/graph/shortest-path-bus?startNodeName=${startNodeName}&endNodeName=${endNodeName}`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to fetch shortest path');
+  }
+};
+
 export const getAdjacencyList = async (stationName) => {
   try {
     const response = await api.get(`/graph/adjacency-list/${stationName}`);
