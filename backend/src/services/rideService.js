@@ -68,11 +68,21 @@ exports.getAllRidesP = async () => {
 
 
 
-exports.registerRideUsingCard = async (ID, StartStation, StartTime) => {
+exports.registerRideUsingCard = async (ID, StartStation, StartTime, type) => {
     try {
       const user = Cards.findOne({
         where: {code: ID},
       })
+
+      const user2 = await CardID_Rides.findOne({
+        where: {user_code: ID, status: 'ONGOING'},
+      })
+
+      console.log(user2)
+
+        if(user2){
+          return '1';
+        }
 
       if(user.money < 13){
         return '';
@@ -88,7 +98,8 @@ exports.registerRideUsingCard = async (ID, StartStation, StartTime) => {
         price: 0,
         start_time: StartTime,
         end_time: StartTime,
-        status: 'ONGOING'
+        status: 'ONGOING',
+        class: type,
       });
       console.log('Ride registered successfully:', newRide.toJSON());
       return 'Success';
@@ -116,18 +127,32 @@ exports.exitRideUsingCard = async (id, ID, endStation, endTime) => {
     const start = await getChineseName(exitRide.start_station);
     const end = await getChineseName(endStation);
     const JourneyPrice = await getPrice(start, end);
-    await exitRide.update({end_station: endStation, end_time: endTime, price: JourneyPrice, status: 'EXPIRED'});
-    await card.update({money: card.money - JourneyPrice});
+
+    if(exitRide.class == 'BUSINESS'){
+      await exitRide.update({end_station: endStation, end_time: endTime, price: (2*JourneyPrice), status: 'EXPIRED'});
+      await card.update({money: card.money - (2*JourneyPrice)});
+    }else{
+      await exitRide.update({end_station: endStation, end_time: endTime, price: JourneyPrice, status: 'EXPIRED'});
+      await card.update({money: card.money - JourneyPrice});
+    }
     console.log('Exit Ride:', exitRide.toJSON());
   } catch (error) {
     console.error('Error inserting data:', error);
   }
 };
 
-exports.registerRideUsingPassenger = async (ID, StartStation, StartTime) => {
+exports.registerRideUsingPassenger = async (ID, StartStation, StartTime, type) => {
   try {
     const maxRideId = await getIDP();
     const newRideId = maxRideId + 1;
+
+    const user2 = await UserID_Rides.findOne({
+      where: {user_id: ID, status: 'ONGOING'},
+    })
+
+      if(user2){
+        return '1';
+      }
     const newRide = await UserID_Rides.create({
       ride_id: newRideId,
       user_id: ID,
@@ -137,6 +162,7 @@ exports.registerRideUsingPassenger = async (ID, StartStation, StartTime) => {
       start_time: StartTime,
       end_time: StartTime,
       status: 'ONGOING',
+      class: type,
       returning: false,
     });
     console.log('Ride registered successfully:', newRide.toJSON());
@@ -154,7 +180,11 @@ exports.exitRideUsingPassenger = async (ID, endStation, endTime) => {
     const start = await getChineseName(exitRide.start_station);
     const end = await getChineseName(endStation);
     const JourneyPrice = await getPrice(start, end);
-    await exitRide.update({end_station: endStation, end_time: endTime, price: JourneyPrice, status: 'EXPIRED'});
+    if(exitRide.class == 'BUSINESS'){
+      await exitRide.update({end_station: endStation, end_time: endTime, price: (2*JourneyPrice), status: 'EXPIRED'});
+    }else{
+      await exitRide.update({end_station: endStation, end_time: endTime, price: JourneyPrice, status: 'EXPIRED'});
+    }
     console.log('Exit Ride:', exitRide.toJSON());
   } catch (error) {
     console.error('Error inserting data:', error);

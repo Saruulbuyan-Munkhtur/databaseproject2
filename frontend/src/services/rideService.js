@@ -21,10 +21,9 @@ export const getAllRidesP = async () => {
   }
 };
 
-export const registerRideUsingCard = async (ID, StartStation, StartTime) => {
+export const registerRideUsingCard = async (ID, StartStation, StartTime, type) => {
     try{
-        console.log(StartStation);
-        const response = await api.post('/rides/register-ride-using-card', { ID, StartStation, StartTime});
+        const response = await api.post('/rides/register-ride-using-card', { ID, StartStation, StartTime, type});
         return response.data;
     } catch(error) {
         throw new Error('Failed to create ride');
@@ -40,9 +39,9 @@ export const exitRideUsingCard = async (id, ID, EndStation, EndTime) => {
   }
 }
 
-export const registerRideUsingPassenger = async (ID, StartStation, StartTime) => {
+export const registerRideUsingPassenger = async (ID, StartStation, StartTime, type) => {
   try{
-    const response = await api.post('/rides/register-ride-using-passenger', { ID, StartStation, StartTime });
+    const response = await api.post('/rides/register-ride-using-passenger', { ID, StartStation, StartTime, type});
       return response.data;
   } catch(error) {
       throw new Error('Failed to create ride');

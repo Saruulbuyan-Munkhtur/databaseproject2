@@ -24,8 +24,8 @@ exports.getAllRidesP = async (req, res) => {
 
 exports.registerRideUsingCard = async (req, res) => {
     try{
-        const {ID, StartStation, StartTime} = req.body;
-        const newRide = await rideService.registerRideUsingCard(ID, StartStation, StartTime);
+        const {ID, StartStation, StartTime, type} = req.body;
+        const newRide = await rideService.registerRideUsingCard(ID, StartStation, StartTime, type);
         res.json(newRide);
     } catch (error) {
         console.error('Error making ride:', error);
@@ -48,8 +48,8 @@ exports.exitRideUsingCard = async (req, res) => {
 
 exports.registerRideUsingPassenger = async (req, res) => {
   try{
-      const {ID, StartStation, StartTime} = req.body;
-      const newRide = await rideService.registerRideUsingPassenger(ID, StartStation, StartTime);
+      const {ID, StartStation, StartTime, type} = req.body;
+      const newRide = await rideService.registerRideUsingPassenger(ID, StartStation, StartTime, type);
       res.json(newRide);
   } catch (error) {
       console.error('Error making ride:', error);

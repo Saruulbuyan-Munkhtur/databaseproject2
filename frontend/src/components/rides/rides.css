@@ -430,6 +430,40 @@ body, h1, ul {
   .display-money {
 	padding-left: 25px;
   }
+
+  .business-button, .economy-button {
+	padding: 10px 20px;
+	margin: 10px;
+	border: none;
+	border-radius: 5px;
+	font-size: 16px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .business-button {
+	color: white;
+	background-color: blue;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .business-button:hover {
+	background-color: darkblue;
+	transform: translateY(-2px);
+  }
+  
+  .economy-button {
+	color: white;
+	background-color: green;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .economy-button:hover {
+	background-color: darkgreen;
+	transform: translateY(-2px);
+  }
+  
   
   
   

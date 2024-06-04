@@ -34,6 +34,10 @@ const UserID_rides = sequelize.define('userid_rides', {
   status: {
     type: DataTypes.STRING,
     allowNull: false
+  },
+  class: {
+    type: DataTypes.STRING,
+    allowNull: false
   }
 }, {
   timestamps: false, // Disables createdAt and updatedAt
