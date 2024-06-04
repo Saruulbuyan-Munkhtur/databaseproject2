@@ -8,6 +8,8 @@ const ShortestPath = () => {
   const [endNodeName, setEndNodeName] = useState('');
   const [shortestPath, setShortestPath] = useState([]);
   const [bus, setBus] = useState([]);
+  const [numBus, setNumBus] = useState([]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
