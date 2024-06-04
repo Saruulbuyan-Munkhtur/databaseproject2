@@ -9,6 +9,7 @@ const ShortestPath = () => {
   const [shortestPath, setShortestPath] = useState([]);
   const [bus, setBus] = useState([]);
   const [numBus, setNumBus] = useState([]);
+  const [noPath, setNoPath] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,6 +20,7 @@ const ShortestPath = () => {
       setShortestPath(path);
 
       if (path.length == 1) {
+        setNoPath(true);
         let path3 = [];
         const path2 = await getShortestPathWithBus(startNodeName, endNodeName);
         setBus(path2[1][path2[1].length - 1]);
@@ -71,27 +73,27 @@ const ShortestPath = () => {
           <div className="path-container">
             {shortestPath.map((item, index) => (
               <React.Fragment key={index}>
-                {index == shortestPath.length -1 && bus[index] == 'redundant' && (
+                {index == shortestPath.length -1 && bus[index] == 'redundant' && noPath && (
                   <React.Fragment>
                       <div className='bus-info-container'>
                       <StationItem stationName={item} />
                     </div>
                   </React.Fragment>
                 )}
-                { bus[index] !== 'redundant' && index == shortestPath.length -1 && (
+                { bus[index] !== 'redundant' && index == shortestPath.length -1 && noPath &&(
                   <React.Fragment>
                       <div className='bus-info-container'>
                       <StationItem stationName={item} />
                     </div>
                   </React.Fragment>
                 )}
-                {bus[index] == 'redundant' && index < shortestPath.length - 1 &&(
+                {bus[index] == 'redundant' && index < shortestPath.length - 1 && noPath &&(
                   <React.Fragment>
                   <StationItem stationName={item} />
                   <div className="arrow">&#8594;</div>
                   </React.Fragment>
                 )}
-                {bus[index] !== 'redundant' && index < shortestPath.length - 1 && (
+                {bus[index] !== 'redundant' && index < shortestPath.length - 1 && noPath && (
                   <React.Fragment>
                       <div className='bus-info-container'>
                       <StationItem stationName={item} />
@@ -101,6 +103,22 @@ const ShortestPath = () => {
                     </div>
                   </React.Fragment>
                 )}
+                {index < shortestPath.length -1 && !noPath && (
+                  <React.Fragment>
+                      <div className='bus-info-container'>
+                      <StationItem stationName={item} />
+                  <div className="arrow">&#8594;</div>
+                    </div>
+                  </React.Fragment>
+                )}
+                {index == shortestPath.length -1 && !noPath && (
+                  <React.Fragment>
+                      <div className='bus-info-container'>
+                      <StationItem stationName={item} />
+                    </div>
+                  </React.Fragment>
+                )}
+
               </React.Fragment>
             ))}
         </div>
