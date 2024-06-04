@@ -22,6 +22,16 @@ exports.getAllRidesP = async (req, res) => {
   }
 };
 
+exports.getEveryRide = async (req, res) => {
+  try {
+    const cardRides = await rideService.getEveryRide();
+    res.json(cardRides);
+  } catch (error) {
+    console.error('Error fetching rides:', error);
+    res.status(500).send('Failed to fetch rides');
+  }
+};
+
 exports.registerRideUsingCard = async (req, res) => {
     try{
         const {ID, StartStation, StartTime, type} = req.body;

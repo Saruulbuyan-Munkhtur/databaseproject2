@@ -66,6 +66,50 @@ exports.getAllRidesP = async () => {
   }
 };
 
+exports.getEveryRide = async () => {
+  try {
+    // Fetch ongoing rides from cardid_rides table
+    const cardRides = await CardID_Rides.findAll();
+
+    // Fetch ongoing rides from userid_rides table
+    const userRides = await UserID_Rides.findAll();
+
+    // Combine the rides from both tables
+    const allRides = [...cardRides, ...userRides];
+
+    // Extract relevant ride details
+    const rideDetails = allRides.map((ride) => {
+      const { ride_id, start_station, end_station, price, start_time, end_time, status } = ride;
+      const user = ride.user_code ? ride.Card : ride.Passenger;
+      const userId = user ? (ride.user_code ? user.code : user.id_number) : null;
+      const userName = user ? (ride.user_code ? null : user.name) : null;
+      const userPhone = user ? (ride.user_code ? null : user.phone_number) : null;
+      const userMoney = user ? (ride.user_code ? user.money : null) : null;
+
+      return {
+        ride_id,
+        user_id: userId,
+        user_name: userName,
+        user_phone: userPhone,
+        user_money: userMoney,
+        start_station,
+        end_station,
+        price,
+        start_time,
+        end_time,
+        status,
+      };
+    });
+
+    console.log('Ride Details:', JSON.stringify(rideDetails, null, 2));
+
+    return rideDetails;
+  } catch (error) {
+    console.error('Error fetching rides:', error);
+    throw new Error('Failed to fetch rides');
+  }
+};
+
 
 
 exports.registerRideUsingCard = async (ID, StartStation, StartTime, type) => {
@@ -333,3 +377,4 @@ exports.reloadCard = async (Code, amount) => {
     console.error('Error updating card:', err);
   }
 };
+

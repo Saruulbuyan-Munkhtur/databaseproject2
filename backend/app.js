@@ -38,15 +38,6 @@ sequelize.sync()
     app.listen(3000, () => {
       console.log('Server is running on port 3000');
     });
-    StationPopularity.findAll()
-  .then(results => {
-    // Handle the query results
-    console.log(results);
-  })
-  .catch(error => {
-    // Handle any errors
-    console.error(error);
-  });
   })
   .catch((error) => {
     console.error('Error syncing database:', error);

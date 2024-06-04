@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import './home.css';
 import { getStations } from '../../services/stationService';
-import { getPeakHours, getStationPopularity } from '../../services/viewService';
+import { getPeakHours, getStationPopularity, getAvgTravelTime, getStationToStationPopularity } from '../../services/viewService';
 import StationItem from '../stations/stationItem';
 import PeakHours from '../views/peakHours';
 import StationPopularity from '../views/stationPopularity';
+import TravelTimePopularity from '../views/travelTimePopularity';
 
 const Home = () => {
   const [stations, setStations] = useState([]);
   const [peakHoursData, setPeakHoursData] = useState([]);
   const [stationPopularityData, setStationPopularityData] = useState([]);
-
+  const [avgTravelTimeData, setAvgTravelTimeData] = useState([]);
+  const [stsPopularityData, setStsPopularityData] = useState([]);
 
   useEffect(() => {
     const fetchStations = async () => {
@@ -41,10 +43,30 @@ const Home = () => {
         console.error('Error fetching station popularity:', error);
       }
     };
+    const fetchAvgTravelTime = async () => {
+      try{
+        const data = await getAvgTravelTime();
+        console.log(data);
+        setAvgTravelTimeData(data);
+      } catch(error){
+        console.error('Erro fetching station popularity: ', error);
+      }
+    }
+    const fetchstsPopularity = async () => {
+      try{
+        const data = await getStationToStationPopularity();
+        console.log(data);
+        setStsPopularityData(data);
+      } catch(error){
+        console.error('Erro fetching station popularity: ', error);
+      }
+    }
 
     fetchStations();
     fetchPeakHours();
     fetchStationPopularity();
+    fetchAvgTravelTime();
+    fetchstsPopularity();
   }, []);
 
   return (
@@ -85,9 +107,17 @@ const Home = () => {
       <section className="station-popularity">
         <h2>Station Popularity</h2>
         {stationPopularityData.length === 0 ? (
-          <p>Loading peak hours...</p>
+          <p>Loading Station Popularity...</p>
         ) : (
           <StationPopularity data={stationPopularityData} />
+        )}
+      </section>
+      <section className="travel-time-popularity">
+        <h2>Time Travel Popularity</h2>
+        {stationPopularityData.length === 0 ? (
+          <p>Loading time travel popularity...</p>
+        ) : (
+          <TravelTimePopularity travelTimeData={avgTravelTimeData} popularityData={stsPopularityData} />
         )}
       </section>
     </div>
