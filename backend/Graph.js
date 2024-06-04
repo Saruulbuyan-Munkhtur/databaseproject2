@@ -14,7 +14,7 @@ const { group } = require('console');
 class Node {
     constructor(name) {
       this.name = name;
-      this.adj = new Map(); // Adjacency list to store neighbors and weights
+      this.adj = new Map(); 
       this.bus = null;
     }
   
@@ -48,12 +48,12 @@ class Node {
   
     const Data = await Lines_Station.findAll();
   
-    // Iterate over each line
+
     for (const { line_name } of Data.map(row => ({ line_name: row.line_name })).filter((value, index, self) => self.findIndex(t => t.line_name === value.line_name) === index)) {
-      // Get stations for the current line
+
       const stationsForLine = Data.filter(row => row.line_name === line_name);
   
-      // Create nodes for each station in the current line
+
       for (const { station_name, position,status } of stationsForLine) {
         const nodeId = `${station_name}`;
         const nodeName = `${station_name}`;
@@ -66,9 +66,7 @@ class Node {
             const prevStation = stationsForLine.find(station => station.position === position - 1);
             const prevNodeId = `${prevStation.station_name}`;
             
-            // Check if both the current station and the previous station are operational
             if (prevStation.status === 'OPERATIONAL' && status === 'OPERATIONAL') {
-                // Ensure the current station and the previous station are added to the graph
                 if (!graph.has(nodeId)) {
                     graph.set(nodeId, new Node(nodeId));
                 }
@@ -76,7 +74,6 @@ class Node {
                     graph.set(prevNodeId, new Node(prevNodeId));
                 }
         
-                // Add edges between the current station and the previous station
                 graph.get(nodeId).addNeighbor(prevNodeId);
                 graph.get(prevNodeId).addNeighbor(nodeId);
             }
@@ -94,12 +91,10 @@ class Node {
     const Data = await Lines_Station.findAll();
     const Data2 = await sequelize.query(query);
   
-    // Iterate over each line
+
     for (const { line_name } of Data.map(row => ({ line_name: row.line_name })).filter((value, index, self) => self.findIndex(t => t.line_name === value.line_name) === index)) {
-      // Get stations for the current line
       const stationsForLine = Data.filter(row => row.line_name === line_name);
   
-      // Create nodes for each station in the current line
       for (const { station_name, position,status } of stationsForLine) {
         const nodeId = `${station_name}`;
         const nodeName = `${station_name}`;
@@ -112,9 +107,7 @@ class Node {
             const prevStation = stationsForLine.find(station => station.position === position - 1);
             const prevNodeId = `${prevStation.station_name}`;
             
-            // Check if both the current station and the previous station are operational
             if (prevStation.status === 'OPERATIONAL' && status === 'OPERATIONAL') {
-                // Ensure the current station and the previous station are added to the graph
                 if (!graph.has(nodeId)) {
                     graph.set(nodeId, new Node(nodeId));
                 }
@@ -122,7 +115,6 @@ class Node {
                     graph.set(prevNodeId, new Node(prevNodeId));
                 }
         
-                // Add edges between the current station and the previous station
                 graph.get(nodeId).addNeighbor(prevNodeId);
                 graph.get(prevNodeId).addNeighbor(nodeId);
             }
@@ -130,10 +122,9 @@ class Node {
       }
     }
     for (const row of Data2[0]) {
-        const startStation = row.start_station.trim(); // Remove any leading or trailing spaces
-        const endStation = row.end_station.trim(); // Remove any leading or trailing spaces
+        const startStation = row.start_station.trim(); 
+        const endStation = row.end_station.trim(); 
     
-        // Check if both start and end stations exist in the graph
         if (graph.has(startStation) && graph.has(endStation) && startStation !== endStation) {
             graph.get(startStation).addNeighbor(endStation);
             graph.get(endStation).addNeighbor(startStation);
@@ -246,7 +237,7 @@ async function shortestPathWithBus(startNodeName, endNodeName) {
         const buses = [];
         let currentNode = endNodeName;
         while (currentNode !== null) {
-            shortestPath.unshift(graph.get(currentNode)); // Store the node object in the path
+            shortestPath.unshift(graph.get(currentNode));
             buses.unshift(graph.get(currentNode).bus);
             currentNode = previousNodes.get(currentNode);
         }

@@ -1,12 +1,12 @@
 require('dotenv').config({path: '/Users/harroldtok/databaseproject2/backend/.env'});
 const Sequelize = require('sequelize');
 const { Op } = require('sequelize');
-
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    dialect: process.env.DB_DIALECT,
-  });
+const sequelize = require('./src/config/database.js')
+// const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
+//     host: process.env.DB_HOST,
+//     port: process.env.DB_PORT,
+//     dialect: process.env.DB_DIALECT,
+//   });
 
 
 const Station = require('./src/models/stations.js');
@@ -225,7 +225,6 @@ const modifyLine = async (line_name, updatedDetails) => {
   
   const placeStationsOnLine = async (lineName, stationNames, position, status) => {
     try {
-        // Find the line by name
         const line = await Line.findOne({
             where: { line_name: lineName },
         });
@@ -235,19 +234,16 @@ const modifyLine = async (line_name, updatedDetails) => {
             return;
         }
 
-        // Loop through each station name
-        let currentPosition = position; // Initialize currentPosition to the specified position
+        let currentPosition = position; 
         let x = 0;
 
         for (const stationName of stationNames) {
-          // Check if station exists
           const station = await Station.findOne({
               where: { station_english_name: stationName },
           });
 
           if (!station) {
               console.log(`Station with name "${stationName}" not found.`);
-              // Handle this situation according to your requirements (e.g., skip this station)
               continue;
           }
           x++;
@@ -255,18 +251,15 @@ const modifyLine = async (line_name, updatedDetails) => {
       await updatePositionsAfterInsertion(lineName, position, x, status);
 
         for (const stationName of stationNames) {
-            // Check if station exists
             const station = await Station.findOne({
                 where: { station_english_name: stationName },
             });
 
             if (!station) {
                 console.log(`Station with name "${stationName}" not found.`);
-                // Handle this situation according to your requirements (e.g., skip this station)
                 continue;
             }
             x++;
-            // Create association between line and station at specified position
             await Lines_Station.create({
                 line_name: lineName,
                 station_name: stationName,
@@ -276,7 +269,6 @@ const modifyLine = async (line_name, updatedDetails) => {
 
             console.log(`Station "${stationName}" placed on line "${lineName}" at position ${currentPosition}.`);
 
-            // Increment currentPosition for the next station
             currentPosition++;
         }
     } catch (error) {
@@ -286,7 +278,6 @@ const modifyLine = async (line_name, updatedDetails) => {
 
 const updatePositionsAfterInsertion = async (lineName, lastInsertedPosition, x) => {
   try {
-      // Find stations on the same line with positions greater than or equal to lastInsertedPosition
       const stationsToUpdate = await Lines_Station.findAll({
           where: {
               line_name: lineName,
@@ -307,14 +298,12 @@ const updatePositionsAfterInsertion = async (lineName, lastInsertedPosition, x) 
 
 const findNthStation = async (lineName, stationName, n) => {
   try {
-    // Check if station exists
     const station = await Station.findOne({
       where: { station_english_name: stationName },
   });
 
   if (!station) {
       console.log(`Station with name "${stationName}" not found.`);
-      // Handle this situation according to your requirements (e.g., skip this station)
       return;
   }
 
