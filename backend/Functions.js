@@ -623,13 +623,9 @@ const modifyStationStatus = async (lineName, stationName, newStatus) => {
     where: {line_name: lineName,
     station_name: stationName,}
   })
-  console.log(station.station_name);
-  if (!station) {
-    console.log('Station not found:', stationName);
-    return null; // or throw an error if required
+  if (station) {
+    await station.update({status: newStatus});
   }
-
-  await station.update({status: newStatus});
 }
 module.exports = {modifyPosition, modifyStationStatus};
   

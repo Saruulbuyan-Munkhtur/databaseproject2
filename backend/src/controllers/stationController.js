@@ -10,6 +10,16 @@ exports.createStation = async (req, res) => {
   }
 };
 
+exports.createStation2 = async (req, res) => {
+  try {
+    const { station_english_name, district, intro, chinese_name} = req.body;
+    const newStation = await stationService.createStation2(station_english_name, district, intro, chinese_name);
+    res.status(201).json(newStation);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create station' });
+  }
+};
+
 exports.getAllStations = async (req, res) => {
   try {
     const stations = await stationService.getAllStations();

@@ -18,6 +18,7 @@ const AvgTravelTime = sequelize.define('AvgTravelTime', {
 }, {
     tableName: 'avg_travel_time',
     timestamps: false,
+	paranoid: false,
 //     primaryKey: false,
     defaultScope: {
 	attributes: { exclude: ['id'] },

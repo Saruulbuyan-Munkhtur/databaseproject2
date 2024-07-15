@@ -55,6 +55,7 @@ const LinesPage = () => {
       console.log(newLine);
       fetchLines();
     } catch (error) {
+      alert('No administration!')
       console.error('Error creating line:', error);
     }
   };

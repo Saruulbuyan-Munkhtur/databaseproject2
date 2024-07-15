@@ -1,12 +1,26 @@
 import React, { useState } from 'react';
 
 const CreateLineForm = ({ onSubmit, onClose }) => {
+
+function getCurrentDate() {
+    const currentDate = new Date();
+
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+
+    const formattedDate = `${year}-${month}-${day}`;
+  console.log(formattedDate)
+    return formattedDate.substring(0,10);
+}
+
+const date = getCurrentDate();
   const [formData, setFormData] = useState({
     lineName: '',
     intro: '',
     mileage: '',
     color: '',
-    first_opening: '',
+    first_opening: date,
     url: '',
     start: '',
     end: '',
@@ -53,14 +67,6 @@ const CreateLineForm = ({ onSubmit, onClose }) => {
         name="color"
         placeholder="Color"
         value={formData.color}
-        onChange={handleChange}
-        required
-      />
-      <input
-        type="text"
-        name="first_opening"
-        placeholder="First Opening"
-        value={formData.first_opening}
         onChange={handleChange}
         required
       />

@@ -20,6 +20,21 @@ async function createStation(lineName, station_english_name, district, intro, ch
   await placeStationsOnLine(lineName, [station_english_name], position, status);
   }
 
+  async function createStation2(station_english_name, district, intro, chinese_name) {
+    try {
+      console.log(station_english_name)
+      const newStation = await Station.create({
+        station_english_name: station_english_name,
+        district: district,
+        intro: intro,
+        chinese_name: chinese_name
+      });
+      console.log('Data inserted successfully:', newStation.toJSON());
+    } catch (error) {
+      console.error('Error inserting data:', error);
+    }
+    }
+
 // Get all stations
 async function getAllStations() {
   try {
@@ -206,6 +221,7 @@ try {
 
 module.exports = {
   createStation,
+  createStation2,
   getAllStations,
   getStationById,
   updateStation,
